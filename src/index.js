@@ -1,5 +1,4 @@
-// index.js (ESM version)
-import cron from 'node-cron';
+
 import { getStock } from './ralawise.js';
 import {
   getLocationId,
@@ -56,11 +55,7 @@ async function syncAll() {
   console.log('\n✅ Inventory sync complete.\n');
 }
 
-// Run every 10 minutes
-cron.schedule('*/10 * * * *', () => {
-  console.log(`\n⏰ Running scheduled sync at ${new Date().toLocaleTimeString()}`);
-  syncAll();
-});
+
 
 // Run once on script start
 syncAll();
