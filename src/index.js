@@ -1,3 +1,4 @@
+// index.js (batch-enabled)
 
 import { getStock } from './ralawise.js';
 import {
@@ -7,12 +8,17 @@ import {
 } from './shopify.js';
 import skuMap from '../sku-map.json' assert { type: 'json' };
 
-async function syncAll() {
-  console.log(`\n🔄 Starting inventory sync at ${new Date().toLocaleString()}`);
+async function syncAll(batchIndex = 0, totalBatches = 1) {
+  console.log(`\n🔄 Starting inventory sync (Batch ${batchIndex + 1}/${totalBatches}) at ${new Date().toLocaleString()}`);
   const locationId = await getLocationId();
   console.log(`📍 Shopify location ID: ${locationId}`);
 
-  for (const item of skuMap) {
+  const batchSize = Math.ceil(skuMap.length / totalBatches);
+  const start = batchIndex * batchSize;
+  const end = start + batchSize;
+  const batch = skuMap.slice(start, end);
+
+  for (const item of batch) {
     try {
       console.log(`\n🔁 Syncing SKU: ${item.ralawise_sku}...`);
 
@@ -27,7 +33,7 @@ async function syncAll() {
       const inventoryItemId = await getInventoryItemId(item.shopify_variant_id);
       console.log(`🧩 Shopify inventoryItemId for variant ${item.shopify_variant_id}: ${inventoryItemId}`);
 
-            await updateInventoryLevel(inventoryItemId, locationId, quantity);
+      await updateInventoryLevel(inventoryItemId, locationId, quantity);
       console.log(`✅ Stock updated → SKU: ${sku}, Qty: ${quantity}`);
 
       // Shopify max: 2 requests/sec → use ~1.1s delay to stay safe
@@ -37,7 +43,7 @@ async function syncAll() {
         const wait = parseInt(err.response.headers['retry-after'] || '2') * 1000;
         console.warn(`🚦 Rate limit hit. Waiting ${wait / 1000}s before retrying...`);
         await new Promise(res => setTimeout(res, wait));
-        continue; // Skip to next SKU (or you could retry this one if needed)
+        continue;
       }
 
       console.error(`❌ Error syncing SKU ${item.ralawise_sku}:`);
@@ -51,11 +57,12 @@ async function syncAll() {
     }
   }
 
-
-  console.log('\n✅ Inventory sync complete.\n');
+  console.log(`\n✅ Batch ${batchIndex + 1}/${totalBatches} complete.\n`);
 }
 
+// Entry point for Railway Jobs with env vars like:
+// BATCH_INDEX=0 TOTAL_BATCHES=3 npm start
+const batchIndex = parseInt(process.env.BATCH_INDEX || '0');
+const totalBatches = parseInt(process.env.TOTAL_BATCHES || '1');
 
-
-// Run once on script start
-syncAll();
+syncAll(batchIndex, totalBatches);
