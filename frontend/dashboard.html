@@ -1,0 +1,189 @@
+<!-- frontend/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ralawise Sync App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-sans">
+
+  <!-- Replace the <main> content block inside dashboard.html with this -->
+
+<main class="max-w-7xl mx-auto p-6">
+
+  <!-- App Header -->
+  <header class="mb-6">
+    <h1 class="text-3xl font-bold">Ralawise Inventory Sync</h1>
+    <p class="text-gray-600">Manage and monitor your product syncs from Ralawise to Shopify.</p>
+  </header>
+
+  <!-- Summary Cards -->
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+    <div class="bg-white shadow rounded p-4">
+      <p class="text-sm text-gray-500">Products</p>
+      <h2 class="text-2xl font-bold">748</h2>
+      <p class="text-yellow-600 text-sm mt-1">72% Overall</p>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <p class="text-sm text-gray-500">Collections</p>
+      <h2 class="text-2xl font-bold">91</h2>
+      <p class="text-yellow-600 text-sm mt-1">59% Overall</p>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <p class="text-sm text-gray-500">Sync Errors</p>
+      <h2 class="text-2xl font-bold">3</h2>
+      <p class="text-red-600 text-sm mt-1">Last 24h</p>
+    </div>
+    <div class="bg-white shadow rounded p-4">
+      <p class="text-sm text-gray-500">Mapped SKUs</p>
+      <h2 class="text-2xl font-bold">612</h2>
+      <p class="text-green-600 text-sm mt-1">84% Coverage</p>
+    </div>
+  </section>
+
+  <!-- Action Boxes -->
+  <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <div class="bg-white shadow rounded p-6">
+      <h3 class="text-lg font-semibold mb-2">Get started</h3>
+      <p class="text-sm text-gray-600 mb-4">Sync your Shopify products with Ralawise stock in one click.</p>
+      <button class="sync-trigger bg-black text-white px-4 py-2 rounded">Start Sync</button>
+
+    </div>
+    <div class="bg-white shadow rounded p-6">
+      <h3 class="text-lg font-semibold mb-2">Need help?</h3>
+      <p class="text-sm text-gray-600 mb-4">Schedule a free onboarding call and we’ll walk you through setup.</p>
+      <button class="border border-black text-black px-4 py-2 rounded hover:bg-black hover:text-white">Book a Call</button>
+    </div>
+  </section>
+
+  <!-- Navigation Tabs -->
+  <nav class="flex gap-4 mb-6">
+  <button class="tab-btn px-4 py-2 rounded bg-black text-white" data-tab="products">Products</button>
+  <button class="tab-btn px-4 py-2 rounded bg-gray-200 text-black" data-tab="collections">Collections</button>
+  <button class="tab-btn px-4 py-2 rounded bg-gray-200 text-black" data-tab="sync">Sync Status</button>
+  <button class="tab-btn px-4 py-2 rounded bg-gray-200 text-black" data-tab="map">SKU Map</button>
+</nav>
+
+  <!-- Pages -->
+<section id="tab-products" class="tab-page">
+  <h2 class="text-xl font-semibold mb-2">Product Overview</h2>
+  <p class="text-gray-500 mb-4">View mock products and their sync status.</p>
+  <div class="bg-white shadow rounded overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200 text-sm">
+    <thead class="bg-gray-50 text-left font-medium text-gray-600">
+      <tr>
+        <th class="px-4 py-2">Product</th>
+        <th class="px-4 py-2">Variants</th>
+        <th class="px-4 py-2">Sync Status</th>
+        <th class="px-4 py-2">Last Updated</th>
+        <th class="px-4 py-2 text-right">Action</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100 text-gray-800">
+      <tr>
+        <td class="px-4 py-3 flex items-center gap-3">
+          <img src="https://cdn.shopify.com/s/files/1/1234/5678/products/mock1.jpg?v=1691234567" ... />
+          <span>BE YOU | Oversized Acid Wash Hoodie</span>
+        </td>
+        <td class="px-4 py-3">5</td>
+        <td class="px-4 py-3">
+          <span class="inline-block px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded">Synced</span>
+        </td>
+        <td class="px-4 py-3">Jul 2, 16:10</td>
+        <td class="px-4 py-3 text-right">
+          <button class="text-sm text-blue-600 hover:underline">Resync</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 flex items-center gap-3">
+          <img src="https://via.placeholder.com/40" alt="Product" class="w-10 h-10 rounded border" />
+          <span>Metal Water Bottle</span>
+        </td>
+        <td class="px-4 py-3">2</td>
+        <td class="px-4 py-3">
+          <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Out of Sync</span>
+        </td>
+        <td class="px-4 py-3">Jul 2, 14:55</td>
+        <td class="px-4 py-3 text-right">
+          <button class="text-sm text-blue-600 hover:underline">Resync</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="px-4 py-3 flex items-center gap-3">
+          <img src="https://via.placeholder.com/40" alt="Product" class="w-10 h-10 rounded border" />
+          <span>GROW THROUGH | Heavy Hoodie</span>
+        </td>
+        <td class="px-4 py-3">4</td>
+        <td class="px-4 py-3">
+          <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Failed</span>
+        </td>
+        <td class="px-4 py-3">Jul 1, 20:17</td>
+        <td class="px-4 py-3 text-right">
+          <button class="text-sm text-blue-600 hover:underline">Retry</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</section>
+
+<section id="tab-collections" class="tab-page hidden">
+  <h2 class="text-xl font-semibold mb-2">Tagged Collections</h2>
+  <p class="text-gray-500 mb-4">These are mock collections that will later display live Shopify data.</p>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <!-- Collection Card 1 -->
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-lg mb-1">Skill Issue Gaming</h3>
+      <p class="text-sm text-gray-500 mb-1">12 products</p>
+      <span class="inline-block px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Tag: skill-issue</span>
+    </div>
+
+    <!-- Collection Card 2 -->
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-lg mb-1">KRAKD™</h3>
+      <p class="text-sm text-gray-500 mb-1">7 products</p>
+      <span class="inline-block px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">Tag: krakd-collection</span>
+    </div>
+
+    <!-- Collection Card 3 -->
+    <div class="bg-white shadow rounded p-4">
+      <h3 class="font-semibold text-lg mb-1">GG Apparel Core</h3>
+      <p class="text-sm text-gray-500 mb-1">21 products</p>
+      <span class="inline-block px-2 py-1 text-xs bg-blue-100 text-blue-800 rounded">Tag: gg-core</span>
+    </div>
+
+    <!-- Add more mock cards if desired -->
+  </div>
+</section>
+
+
+<section id="tab-sync" class="tab-page hidden">
+  <h2 class="text-xl font-semibold mb-2">Sync Status</h2>
+  <p class="text-gray-500 mb-4">Last sync: <span class="text-black font-medium">July 2, 2025 @ 16:10</span></p>
+  <ul class="list-disc ml-6 text-sm">
+    <li><span class="text-green-600">✅</span> Hoodie SKU AM010HOPKS synced (Qty 25)</li>
+    <li><span class="text-green-600">✅</span> Mug SKU MU123C updated (Qty 10)</li>
+    <li><span class="text-red-600">❌</span> Failed to sync T-shirt SKU BB421NAVM: 404 error</li>
+  </ul>
+</section>
+
+<section id="tab-map" class="tab-page hidden">
+  <h2 class="text-xl font-semibold mb-2">SKU Map</h2>
+  <p class="text-gray-500 mb-4">Download or view your current Shopify → Ralawise SKU mappings.</p>
+  <div class="bg-white shadow rounded p-4 flex items-center justify-between">
+    <p class="text-sm text-gray-700">🧪 SKU map placeholder — ready for table/export hook.</p>
+    <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Download</button>
+  </div>
+</section>
+
+
+</main>
+
+<script src="script.js?v=1.0.2"></script>
+
+</body>
+</html>
