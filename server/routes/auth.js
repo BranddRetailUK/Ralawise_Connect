@@ -48,7 +48,10 @@ router.get('/callback', async (req, res) => {
     const accessToken = tokenRes.data.access_token;
     console.log("✅ Access token received:", accessToken ? "Yes" : "No");
 
+    // Store the token in DB
     await storeAccessToken(shop, accessToken);
+
+    // Encode host param for frontend
     const host = Buffer.from(shop, 'utf8').toString('base64');
 
     res.redirect(`/app/dashboard.html?shop=${shop}&host=${host}`);
