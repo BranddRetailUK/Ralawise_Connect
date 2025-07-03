@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
 import syncRoutes from './routes/sync.js';
 import webhookRoutes from './routes/webhooks.js';
+import uploadRoutes from './routes/upload.js'; // ✅ NEW
 
 dotenv.config();
 const app = express();
@@ -43,7 +44,7 @@ app.use('/api/auth', authRoutes);           // ✅ Optional if used in frontend 
 app.use('/api/products', productRoutes);
 app.use('/api', syncRoutes);
 app.use('/api/webhooks', webhookRoutes);
-
+app.use('/api', uploadRoutes);              // ✅ NEW: Handles POST /api/upload-skus
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
@@ -52,4 +53,3 @@ app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-

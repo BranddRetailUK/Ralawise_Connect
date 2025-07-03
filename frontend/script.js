@@ -7,11 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => {
       const tab = button.dataset.tab;
 
-      // Toggle tab page visibility
       tabPages.forEach(page => page.classList.add('hidden'));
       document.getElementById(`tab-${tab}`).classList.remove('hidden');
 
-      // Toggle button styles
       tabButtons.forEach(btn => {
         btn.classList.remove('bg-black', 'text-white');
         btn.classList.add('bg-gray-200', 'text-black');
@@ -30,6 +28,32 @@ document.addEventListener('DOMContentLoaded', () => {
         loadProducts();
       }
     });
+  });
+
+  document.querySelector('.sync-trigger')?.addEventListener('click', async () => {
+    const shop = new URLSearchParams(window.location.search).get('shop');
+    if (!shop) return alert('Missing shop in URL');
+
+    try {
+      const res = await fetch('/api/generate-sku-map', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shop }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`✅ ${data.inserted} SKUs mapped. Starting sync...`);
+        await fetch(`/api/sync?shop=${shop}`);
+      } else {
+        console.error(data);
+        alert('❌ Failed to generate SKU map: ' + data.error);
+      }
+    } catch (err) {
+      console.error('❌ Sync error:', err);
+      alert('❌ Failed to start sync');
+    }
   });
 
   let logPoller = null;
@@ -127,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Default tab (deferred to ensure DOM is ready)
   setTimeout(() => {
     const defaultBtn = document.querySelector('.tab-btn[data-tab="products"]');
     if (defaultBtn) defaultBtn.click();
