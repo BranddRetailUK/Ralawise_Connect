@@ -53,3 +53,6 @@ export async function getAccessToken(shop) {
     return null;
   }
 }
+
+// ✅ Needed for collections.js
+export { getAccessToken as getShopToken };
