@@ -1,4 +1,4 @@
-// shopify.js
+// src/shopify.js
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -12,20 +12,47 @@ const shopify = axios.create({
   }
 });
 
+/**
+ * Get the Shopify Location ID (uses the first one found)
+ */
 export async function getLocationId() {
-  const res = await shopify.get('/locations.json');
-  return res.data.locations[0].id; // Use first location
+  try {
+    const res = await shopify.get('/locations.json');
+    const locationId = res.data.locations[0]?.id;
+    console.log(`📍 Shopify location ID: ${locationId}`);
+    return locationId;
+  } catch (err) {
+    console.error('❌ Failed to fetch location ID:', err.response?.data || err.message);
+    throw err;
+  }
 }
 
+/**
+ * Get inventory item ID for a given variant ID
+ */
 export async function getInventoryItemId(variantId) {
-  const res = await shopify.get(`/variants/${variantId}.json`);
-  return res.data.variant.inventory_item_id;
+  try {
+    const res = await shopify.get(`/variants/${variantId}.json`);
+    return res.data.variant.inventory_item_id;
+  } catch (err) {
+    console.error(`❌ Failed to get inventory item ID for variant ${variantId}:`, err.response?.data || err.message);
+    throw err;
+  }
 }
 
+/**
+ * Update inventory level for a given inventory item at a specific location
+ */
 export async function updateInventoryLevel(inventoryItemId, locationId, quantity) {
-  await shopify.post('/inventory_levels/set.json', {
-    inventory_item_id: inventoryItemId,
-    location_id: locationId,
-    available: quantity
-  });
+  try {
+    await shopify.post('/inventory_levels/set.json', {
+      inventory_item_id: inventoryItemId,
+      location_id: locationId,
+      available: quantity
+    });
+    console.log(`✅ Inventory updated → Item ID ${inventoryItemId}, Location ID ${locationId}, Qty ${quantity}`);
+  } catch (err) {
+    console.error(`❌ Failed to update inventory level:`, err.response?.data || err.message);
+    throw err;
+  }
 }

@@ -1,4 +1,4 @@
-// ralawise.js
+// src/ralawise.js
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -33,7 +33,7 @@ async function getToken() {
   return cachedToken;
 }
 
-export async function getStock(sku) {
+export async function getRalawiseStock(sku) {
   const token = await getToken();
   const url = `https://api.ralawise.com/v1/inventory/${sku}`;
   console.log(`👉 Requesting stock from: ${url}`);
@@ -69,7 +69,7 @@ export async function getStock(sku) {
     if (err.response?.status === 429) {
       console.error("🚫 Rate limit hit. Retrying in 2s...");
       await new Promise(r => setTimeout(r, 2200));
-      return await getStock(sku);
+      return await getRalawiseStock(sku);
     }
 
     console.error(`❌ Error fetching stock for SKU ${sku}`);
