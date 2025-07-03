@@ -38,10 +38,12 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);               // ✅ Public Shopify auth route
+app.use('/api/auth', authRoutes);           // ✅ Optional if used in frontend app logic
 app.use('/api/products', productRoutes);
-app.use('/api', syncRoutes); // /api/sync and /api/sync-logs
+app.use('/api', syncRoutes);
 app.use('/api/webhooks', webhookRoutes);
+
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
