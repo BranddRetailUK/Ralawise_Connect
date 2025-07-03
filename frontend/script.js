@@ -27,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tab === 'products') {
         loadProducts();
       }
+
+      if (tab === 'collections') {
+        loadCollections();
+      }
     });
   });
 
@@ -59,25 +63,31 @@ document.addEventListener('DOMContentLoaded', () => {
   let logPoller = null;
 
   function startLiveLogPolling() {
-  if (logPoller) return;
-  logPoller = setInterval(async () => {
-    try {
-      const res = await fetch('/api/live-logs');
-      const { logs } = await res.json();
-      const list = document.getElementById('live-log-list');
-      list.innerHTML = '';
-      logs.forEach(line => {
-        const li = document.createElement('li');
-        li.className = 'text-sm text-gray-700';
-        li.textContent = line;
-        list.appendChild(li);
-      });
-    } catch (err) {
-      console.error('❌ Failed to fetch live logs:', err);
-    }
-  }, 1000);
-}
+    if (logPoller) return;
+    logPoller = setInterval(async () => {
+      try {
+        const res = await fetch('/api/live-logs');
+        const { logs } = await res.json();
+        const list = document.getElementById('live-log-list');
+        list.innerHTML = '';
+        logs.forEach(line => {
+          const li = document.createElement('li');
+          li.className = 'text-sm text-gray-700';
+          li.textContent = line;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('❌ Failed to fetch live logs:', err);
+      }
+    }, 1000);
+  }
 
+  function stopLiveLogPolling() {
+    if (logPoller) {
+      clearInterval(logPoller);
+      logPoller = null;
+    }
+  }
 
   async function loadSyncLogs() {
     try {
@@ -146,6 +156,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  async function loadCollections() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shop = urlParams.get('shop');
+    if (!shop) return;
+
+    try {
+      const res = await fetch(`/api/collections?shop=${shop}`);
+      const data = await res.json();
+
+      const container = document.getElementById('collections-list');
+      container.innerHTML = '';
+
+      data.collections.forEach(col => {
+        const div = document.createElement('div');
+        div.className = 'border rounded px-4 py-3 bg-white shadow-sm mb-2';
+
+        div.innerHTML = `
+          <div class="text-sm font-semibold text-gray-900">${col.title}</div>
+          <div class="text-xs text-gray-500">${col.products_count} product(s)</div>
+        `;
+
+        container.appendChild(div);
+      });
+    } catch (err) {
+      console.error('❌ Failed to load collections:', err);
+    }
+  }
+
+  // Default tab
   setTimeout(() => {
     const defaultBtn = document.querySelector('.tab-btn[data-tab="products"]');
     if (defaultBtn) defaultBtn.click();
