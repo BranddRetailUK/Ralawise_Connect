@@ -1,4 +1,3 @@
-// server/db.js
 import pg from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -18,40 +17,45 @@ export default db;
 
 export async function storeAccessToken(shop, token) {
   try {
-    await db.query(
+    const result = await db.query(
       `
-      INSERT INTO store_tokens (shop_domain, access_token)
-      VALUES ($1, $2)
+      INSERT INTO store_tokens (shop_domain, access_token, created_at)
+      VALUES ($1, $2, NOW())
       ON CONFLICT (shop_domain)
-      DO UPDATE SET access_token = EXCLUDED.access_token, created_at = now();
+      DO UPDATE SET access_token = $2, created_at = NOW()
+      RETURNING *;
       `,
       [shop, token]
     );
-    console.log(`✅ Token stored in DB for ${shop}`);
+
+    console.log(`✅ Token stored in DB for ${shop}:`, result.rows[0]);
   } catch (err) {
-    console.error(`❌ Failed to store token for ${shop}:`, err.message);
+    console.error(`❌ Failed to store token for ${shop}:`, err.message || err);
   }
 }
 
 export async function getAccessToken(shop) {
   try {
-    const res = await db.query(
-      `SELECT access_token FROM store_tokens WHERE shop_domain = $1`,
+    const result = await db.query(
+      'SELECT access_token FROM store_tokens WHERE shop_domain = $1',
       [shop]
     );
-    if (res.rows.length) {
-      return res.rows[0].access_token;
+
+    if (result.rows.length > 0) {
+      console.log(`🔑 Retrieved token from DB for ${shop}`);
+      return result.rows[0].access_token;
     }
 
-    // Optional fallback for development
+    // Optional fallback (should now be removed in prod)
     if (shop === 'ggappareluk.myshopify.com' && process.env.SHOPIFY_ACCESS_TOKEN) {
-      console.log('⚠️ Using fallback token from .env for:', shop);
+      console.warn(`⚠️ Using fallback token for ${shop} (from env)`);
       return process.env.SHOPIFY_ACCESS_TOKEN;
     }
 
+    console.warn(`⚠️ No token found for ${shop}`);
     return null;
   } catch (err) {
-    console.error(`❌ Failed to get token for ${shop}:`, err.message);
+    console.error(`❌ Failed to get token for ${shop}:`, err.message || err);
     return null;
   }
 }
