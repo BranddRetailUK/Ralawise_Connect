@@ -18,10 +18,16 @@ async function login() {
     cachedToken = res.data.access_token;
     tokenExpiry = Date.now() + res.data.expires_in * 1000;
 
-    console.log("✅ Ralawise token acquired:");
+    console.log(`✅ Ralawise token acquired: ${cachedToken.slice(0, 12)}...`);
     return cachedToken;
   } catch (err) {
     console.error("❌ Failed to authenticate with Ralawise.");
+    if (err.response) {
+      console.error(`Status: ${err.response.status}`);
+      console.error(`Data:`, err.response.data);
+    } else {
+      console.error(err.stack || err.message);
+    }
     throw err;
   }
 }
@@ -36,7 +42,9 @@ async function getToken() {
 export async function getRalawiseStock(sku) {
   const token = await getToken();
   const url = `https://api.ralawise.com/v1/inventory/${sku}`;
+
   console.log(`👉 Requesting stock from: ${url}`);
+  console.log(`🛰️ Token used: ${token?.slice(0, 12)}...`);
 
   try {
     const res = await axios.get(url, {
@@ -49,6 +57,7 @@ export async function getRalawiseStock(sku) {
 
     if (!variant) {
       console.warn(`⚠️ No variant data found in Ralawise response for SKU: ${sku}`);
+      console.warn(`Raw response:`, JSON.stringify(res.data, null, 2));
       return { sku: null, quantity: null };
     }
 
@@ -61,18 +70,16 @@ export async function getRalawiseStock(sku) {
     return result;
 
   } catch (err) {
-    if (err.response?.status === 404) {
-      console.warn(`⚠️ Ralawise SKU not found: ${sku}`);
-      return { sku: null, quantity: null };
-    }
-
-    if (err.response?.status === 429) {
-      console.error("🚫 Rate limit hit. Retrying in 2s...");
-      await new Promise(r => setTimeout(r, 2200));
-      return await getRalawiseStock(sku);
-    }
-
     console.error(`❌ Error fetching stock for SKU ${sku}`);
+
+    if (err.response) {
+      console.error(`Status: ${err.response.status}`);
+      console.error(`Data:`, err.response.data);
+      console.error(`Headers:`, err.response.headers);
+    } else {
+      console.error(err.stack || err.message);
+    }
+
     throw err;
   }
 }
