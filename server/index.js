@@ -1,4 +1,7 @@
 // server/index.js
+
+console.log("🟡 Starting Express server...");
+
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
