@@ -59,30 +59,25 @@ document.addEventListener('DOMContentLoaded', () => {
   let logPoller = null;
 
   function startLiveLogPolling() {
-    if (logPoller) return;
-    logPoller = setInterval(async () => {
-      try {
-        const res = await fetch('/api/live-logs');
-        const { logs } = await res.json();
-        const list = document.getElementById('live-log-list');
-        list.innerHTML = '';
-        logs.forEach(line => {
-          const li = document.createElement('li');
-          li.textContent = line;
-          list.appendChild(li);
-        });
-      } catch (err) {
-        console.error('❌ Failed to fetch live logs:', err);
-      }
-    }, 1000);
-  }
-
-  function stopLiveLogPolling() {
-    if (logPoller) {
-      clearInterval(logPoller);
-      logPoller = null;
+  if (logPoller) return;
+  logPoller = setInterval(async () => {
+    try {
+      const res = await fetch('/api/live-logs');
+      const { logs } = await res.json();
+      const list = document.getElementById('live-log-list');
+      list.innerHTML = '';
+      logs.forEach(line => {
+        const li = document.createElement('li');
+        li.className = 'text-sm text-gray-700';
+        li.textContent = line;
+        list.appendChild(li);
+      });
+    } catch (err) {
+      console.error('❌ Failed to fetch live logs:', err);
     }
-  }
+  }, 1000);
+}
+
 
   async function loadSyncLogs() {
     try {
