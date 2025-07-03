@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
     const products = shopifyRes.data.products.map(product => ({
       id: product.id,
       title: product.title,
-      image: product.image?.src || null,
+      image: product.image?.src || product.images?.[0]?.src || null,
       variants: product.variants.length,
       handle: product.handle,
       updated_at: product.updated_at
