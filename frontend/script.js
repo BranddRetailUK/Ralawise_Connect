@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shop = urlParams.get('shop');
     if (!shop) return;
 
-    const res = await fetch(`/products?shop=${shop}`);
+    const res = await fetch(`/api/products?shop=${shop}`);
     const data = await res.json();
     const container = document.getElementById('product-grid');
     container.innerHTML = '';
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const variants = document.createElement('p');
       variants.className = 'text-xs text-gray-500';
-      variants.textContent = `${product.variants.length} variant(s)`;
+      variants.textContent = `${product.variants} variant(s)`;
 
       card.appendChild(img);
       card.appendChild(title);

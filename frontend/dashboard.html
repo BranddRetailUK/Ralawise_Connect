@@ -66,67 +66,15 @@
   <button class="tab-btn px-4 py-2 rounded bg-gray-200 text-black" data-tab="map">SKU Map</button>
 </nav>
 
-  <!-- Pages -->
+ <!-- Pages -->
 <section id="tab-products" class="tab-page">
   <h2 class="text-xl font-semibold mb-2">Product Overview</h2>
-  <p class="text-gray-500 mb-4">View mock products and their sync status.</p>
-  <div class="bg-white shadow rounded overflow-x-auto">
-  <table class="min-w-full divide-y divide-gray-200 text-sm">
-    <thead class="bg-gray-50 text-left font-medium text-gray-600">
-      <tr>
-        <th class="px-4 py-2">Product</th>
-        <th class="px-4 py-2">Variants</th>
-        <th class="px-4 py-2">Sync Status</th>
-        <th class="px-4 py-2">Last Updated</th>
-        <th class="px-4 py-2 text-right">Action</th>
-      </tr>
-    </thead>
-    <tbody class="divide-y divide-gray-100 text-gray-800">
-      <tr>
-        <td class="px-4 py-3 flex items-center gap-3">
-          <img src="https://cdn.shopify.com/s/files/1/1234/5678/products/mock1.jpg?v=1691234567" ... />
-          <span>BE YOU | Oversized Acid Wash Hoodie</span>
-        </td>
-        <td class="px-4 py-3">5</td>
-        <td class="px-4 py-3">
-          <span class="inline-block px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded">Synced</span>
-        </td>
-        <td class="px-4 py-3">Jul 2, 16:10</td>
-        <td class="px-4 py-3 text-right">
-          <button class="text-sm text-blue-600 hover:underline">Resync</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="px-4 py-3 flex items-center gap-3">
-          <img src="https://via.placeholder.com/40" alt="Product" class="w-10 h-10 rounded border" />
-          <span>Metal Water Bottle</span>
-        </td>
-        <td class="px-4 py-3">2</td>
-        <td class="px-4 py-3">
-          <span class="inline-block px-2 py-1 text-xs font-semibold bg-yellow-100 text-yellow-800 rounded">Out of Sync</span>
-        </td>
-        <td class="px-4 py-3">Jul 2, 14:55</td>
-        <td class="px-4 py-3 text-right">
-          <button class="text-sm text-blue-600 hover:underline">Resync</button>
-        </td>
-      </tr>
-      <tr>
-        <td class="px-4 py-3 flex items-center gap-3">
-          <img src="https://via.placeholder.com/40" alt="Product" class="w-10 h-10 rounded border" />
-          <span>GROW THROUGH | Heavy Hoodie</span>
-        </td>
-        <td class="px-4 py-3">4</td>
-        <td class="px-4 py-3">
-          <span class="inline-block px-2 py-1 text-xs font-semibold bg-red-100 text-red-800 rounded">Failed</span>
-        </td>
-        <td class="px-4 py-3">Jul 1, 20:17</td>
-        <td class="px-4 py-3 text-right">
-          <button class="text-sm text-blue-600 hover:underline">Retry</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <p class="text-gray-500 mb-4">View your Shopify products and their sync status below.</p>
+
+  <!-- Dynamic Product Grid -->
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 bg-white p-4 shadow rounded"></div>
+</section>
+
 
 </section>
 
