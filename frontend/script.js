@@ -1,21 +1,20 @@
+// frontend/script.js
 console.log('🟢 script.js loaded');
 
 const params = new URLSearchParams(window.location.search);
 const shop = params.get('shop');
 const host = params.get('host');
 
-// Initialize Shopify App Bridge (only inside Shopify)
 if (window['app-bridge']) {
   const AppBridge = window['app-bridge'];
   const createApp = AppBridge.default;
   const app = createApp({
-    apiKey: 'YOUR_API_KEY', // will be injected dynamically later
+    apiKey: 'YOUR_API_KEY',
     host,
     forceRedirect: true
   });
 }
 
-// 🔁 Sync Button
 document.querySelectorAll('.sync-trigger').forEach(btn => {
   btn.addEventListener('click', async () => {
     try {
@@ -29,7 +28,6 @@ document.querySelectorAll('.sync-trigger').forEach(btn => {
   });
 });
 
-// 📦 Load Products
 async function loadProducts() {
   try {
     const res = await fetch(`http://localhost:3001/api/products?shop=${shop}`);
@@ -41,7 +39,7 @@ async function loadProducts() {
       return;
     }
 
-    tableBody.innerHTML = ''; // Clear existing rows
+    tableBody.innerHTML = '';
     data.products.forEach(product => {
       const row = document.createElement('tr');
       row.innerHTML = `
@@ -65,7 +63,28 @@ async function loadProducts() {
   }
 }
 
-// 🧭 Tab Switching
+async function loadSyncLogs() {
+  try {
+    const res = await fetch('http://localhost:3001/api/sync-logs');
+    const data = await res.json();
+    const list = document.querySelector('#tab-sync ul');
+    list.innerHTML = '';
+
+    data.logs.forEach(log => {
+      const li = document.createElement('li');
+      const time = new Date(log.time).toLocaleTimeString();
+      if (log.status === 'success') {
+        li.innerHTML = `<span class="text-green-600">✅</span> ${log.sku} synced (Qty ${log.quantity}) @ ${time}`;
+      } else {
+        li.innerHTML = `<span class="text-red-600">❌</span> Failed to sync ${log.sku}: ${log.error} @ ${time}`;
+      }
+      list.appendChild(li);
+    });
+  } catch (err) {
+    console.error('❌ Failed to load sync logs:', err);
+  }
+}
+
 const tabs = document.querySelectorAll('.tab-btn');
 const pages = document.querySelectorAll('.tab-page');
 
@@ -85,10 +104,10 @@ tabs.forEach(btn => {
     document.getElementById(`tab-${tab}`).classList.remove('hidden');
 
     if (tab === 'products') loadProducts();
+    if (tab === 'sync') loadSyncLogs();
   });
 });
 
-// 🔃 Load products on first load if already on tab
 if (document.getElementById('tab-products')?.classList.contains('hidden') === false) {
   loadProducts();
 }

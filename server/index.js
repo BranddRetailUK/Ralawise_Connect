@@ -28,7 +28,7 @@ app.use('/app', express.static(path.join(__dirname, '../frontend')));
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/sync', syncRoutes);
+app.use('/api', syncRoutes); // ✅ FIXED: now /api/sync and /api/sync-logs both work
 app.use('/api/webhooks', webhookRoutes);
 
 // Root health check
@@ -36,6 +36,7 @@ app.get('/', (req, res) => {
   res.send('✅ Ralawise Public App API is running.');
 });
 
+// 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
 
 app.listen(PORT, () => {

@@ -1,0 +1,65 @@
+[
+  {
+    "time": "2025-07-03T09:01:55.416Z",
+    "sku": "JH120DPBKXS",
+    "status": "success",
+    "quantity": 0,
+    "variantId": 50573404930375
+  },
+  {
+    "time": "2025-07-03T09:01:53.614Z",
+    "sku": "JH120BAPKXS",
+    "status": "success",
+    "quantity": 137,
+    "variantId": 50949895094599
+  },
+  {
+    "time": "2025-07-03T09:01:51.785Z",
+    "sku": "JH120SORDXS",
+    "status": "success",
+    "quantity": 175,
+    "variantId": 50949894897991
+  },
+  {
+    "time": "2025-07-03T09:01:46.208Z",
+    "sku": "JH120EAGNXS",
+    "status": "success",
+    "quantity": 155,
+    "variantId": 50949894111559
+  },
+  {
+    "time": "2025-07-03T09:01:44.360Z",
+    "sku": "JH120DSANXS",
+    "status": "success",
+    "quantity": 123,
+    "variantId": 50949893914951
+  },
+  {
+    "time": "2025-07-03T09:01:42.519Z",
+    "sku": "JH120ABLUXS",
+    "status": "success",
+    "quantity": 98,
+    "variantId": 50949893521735
+  },
+  {
+    "time": "2025-07-03T09:01:40.664Z",
+    "sku": "JH120AWHIXS",
+    "status": "success",
+    "quantity": 0,
+    "variantId": 50949893325127
+  },
+  {
+    "time": "2025-07-03T09:01:38.826Z",
+    "sku": "JH120DPBKXS",
+    "status": "success",
+    "quantity": 0,
+    "variantId": 50335771459911
+  },
+  {
+    "time": "2025-07-03T09:01:36.987Z",
+    "sku": "JH001ASHG2XL",
+    "status": "success",
+    "quantity": 654,
+    "variantId": 51847580483911
+  }
+]

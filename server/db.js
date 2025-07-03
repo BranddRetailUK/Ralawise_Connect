@@ -1,5 +1,8 @@
 // server/db.js
-const store = new Map(); // Replace with real DB later
+import dotenv from 'dotenv';
+dotenv.config();
+
+const store = new Map(); // In-memory store
 
 export async function storeAccessToken(shop, token) {
   store.set(shop, { token, createdAt: new Date() });
@@ -7,5 +10,15 @@ export async function storeAccessToken(shop, token) {
 }
 
 export async function getAccessToken(shop) {
-  return store.get(shop)?.token || null;
+  // First check in-memory
+  const stored = store.get(shop)?.token;
+  if (stored) return stored;
+
+  // Fallback: use .env token for dev
+  if (shop === 'ggappareluk.myshopify.com' && process.env.SHOPIFY_ACCESS_TOKEN) {
+    console.log('⚠️ Using fallback token from .env for:', shop);
+    return process.env.SHOPIFY_ACCESS_TOKEN;
+  }
+
+  return null;
 }

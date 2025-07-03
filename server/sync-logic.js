@@ -1,5 +1,6 @@
 // server/sync-logic.js
 import fs from 'fs/promises';
+import fsSync from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -11,6 +12,19 @@ import { getRalawiseStock } from '../src/ralawise.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const logPath = path.join(__dirname, '../sync-log.json');
+
+function appendLog(entry) {
+  const timestamp = new Date().toISOString();
+  const log = { time: timestamp, ...entry };
+
+  const existing = fsSync.existsSync(logPath)
+    ? JSON.parse(fsSync.readFileSync(logPath, 'utf8'))
+    : [];
+
+  existing.unshift(log);
+  fsSync.writeFileSync(logPath, JSON.stringify(existing.slice(0, 50), null, 2));
+}
 
 export async function runSyncForShop(shop, token) {
   console.log(`🔁 Starting stock sync for: ${shop}`);
@@ -37,7 +51,8 @@ export async function runSyncForShop(shop, token) {
         const { quantity } = await getRalawiseStock(ralawise_sku);
 
         if (quantity === null) {
-          console.warn(`⚠️ No quantity returned for ${ralawise_sku}, skipping`);
+          console.warn(`⚠️ No quantity for ${ralawise_sku}, skipping`);
+          appendLog({ sku: ralawise_sku, status: 'error', error: 'No stock returned' });
           continue;
         }
 
@@ -47,9 +62,11 @@ export async function runSyncForShop(shop, token) {
         await updateInventoryLevel(inventoryItemId, locationId, quantity);
 
         console.log(`✅ Stock synced → Variant ID: ${shopify_variant_id}, Qty: ${quantity}`);
-        await new Promise(res => setTimeout(res, 1500)); // Rate limit buffer
+        appendLog({ sku: ralawise_sku, status: 'success', quantity, variantId: shopify_variant_id });
+        await new Promise(res => setTimeout(res, 1500));
       } catch (err) {
         console.error(`❌ Sync failed for ${ralawise_sku}: ${err.message || err}`);
+        appendLog({ sku: ralawise_sku, status: 'error', error: err.message || err, variantId: shopify_variant_id });
       }
     }
 

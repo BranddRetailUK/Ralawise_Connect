@@ -163,13 +163,14 @@
 
 <section id="tab-sync" class="tab-page hidden">
   <h2 class="text-xl font-semibold mb-2">Sync Status</h2>
-  <p class="text-gray-500 mb-4">Last sync: <span class="text-black font-medium">July 2, 2025 @ 16:10</span></p>
-  <ul class="list-disc ml-6 text-sm">
-    <li><span class="text-green-600">✅</span> Hoodie SKU AM010HOPKS synced (Qty 25)</li>
-    <li><span class="text-green-600">✅</span> Mug SKU MU123C updated (Qty 10)</li>
-    <li><span class="text-red-600">❌</span> Failed to sync T-shirt SKU BB421NAVM: 404 error</li>
+  <p class="text-gray-500 mb-4">
+    Last sync: <span class="text-black font-medium" id="last-sync-time">Loading...</span>
+  </p>
+  <ul id="sync-log-list" class="list-disc ml-6 text-sm space-y-1 text-gray-800">
+    <!-- Logs will be dynamically inserted here -->
   </ul>
 </section>
+
 
 <section id="tab-map" class="tab-page hidden">
   <h2 class="text-xl font-semibold mb-2">SKU Map</h2>
