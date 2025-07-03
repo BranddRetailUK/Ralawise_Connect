@@ -99,26 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = '';
 
     data.products.forEach(product => {
-      const card = document.createElement('div');
-      card.className = 'rounded-lg border p-3 flex flex-col items-center text-center shadow';
+      const row = document.createElement('div');
+      row.className = 'flex items-center justify-between gap-4 border rounded px-4 py-3 bg-white shadow-sm';
+
+      const left = document.createElement('div');
+      left.className = 'flex items-center gap-4';
 
       const img = document.createElement('img');
-      img.src = product.image || 'https://via.placeholder.com/200';
-      img.alt = product.title;
-      img.className = 'w-full max-w-[150px] object-cover rounded mb-2';
+      img.src = product.image || 'https://placehold.co/80x80?text=No+Image';
+      img.alt = product.title || 'Product image';
+      img.className = 'w-12 h-12 object-cover rounded border';
+      img.onerror = () => {
+        img.src = 'https://placehold.co/80x80?text=No+Image';
+      };
 
-      const title = document.createElement('h3');
-      title.className = 'text-sm font-semibold';
-      title.textContent = product.title;
+      const info = document.createElement('div');
+      info.innerHTML = `
+        <div class="text-sm font-semibold text-gray-900">${product.title}</div>
+        <div class="text-xs text-gray-500">${product.variants} variant(s)</div>
+      `;
 
-      const variants = document.createElement('p');
-      variants.className = 'text-xs text-gray-500';
-      variants.textContent = `${product.variants} variant(s)`;
+      left.appendChild(img);
+      left.appendChild(info);
+      row.appendChild(left);
 
-      card.appendChild(img);
-      card.appendChild(title);
-      card.appendChild(variants);
-      container.appendChild(card);
+      container.appendChild(row);
     });
   }
 
