@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logPoller) return;
     logPoller = setInterval(async () => {
       try {
-        const res = await fetch('http://localhost:3001/api/live-logs');
+        const res = await fetch('/api/live-logs');
         const { logs } = await res.json();
         const list = document.getElementById('live-log-list');
         list.innerHTML = '';
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadSyncLogs() {
     try {
-      const res = await fetch('http://localhost:3001/api/sync-logs');
+      const res = await fetch('/api/sync-logs');
       const data = await res.json();
       const list = document.getElementById('sync-log-list');
       const lastSync = document.getElementById('last-sync-time');
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const shop = urlParams.get('shop');
     if (!shop) return;
 
-    const res = await fetch(`http://localhost:3001/products?shop=${shop}`);
+    const res = await fetch(`/products?shop=${shop}`);
     const data = await res.json();
     const container = document.getElementById('product-grid');
     container.innerHTML = '';
