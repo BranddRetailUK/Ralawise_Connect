@@ -1,0 +1,41 @@
+// server/routes/collections.js
+import express from 'express';
+import { getShopToken } from '../db.js';
+import axios from 'axios';
+
+const router = express.Router();
+
+router.get('/', async (req, res) => {
+  const { shop } = req.query;
+
+  if (!shop) return res.status(400).json({ error: 'Missing shop param' });
+
+  const token = await getShopToken(shop);
+  if (!token) return res.status(403).json({ error: 'Missing token for shop' });
+
+  try {
+    const response = await axios.get(
+      `https://${shop}/admin/api/2023-10/custom_collections.json`,
+      {
+        headers: {
+          'X-Shopify-Access-Token': token,
+        },
+      }
+    );
+
+    const collections = response.data.custom_collections;
+
+    res.json(
+      collections.map((c) => ({
+        id: c.id,
+        title: c.title,
+        handle: c.handle,
+      }))
+    );
+  } catch (err) {
+    console.error('❌ Error fetching collections:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to fetch collections' });
+  }
+});
+
+export default router;

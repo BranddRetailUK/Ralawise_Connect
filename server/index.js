@@ -12,7 +12,8 @@ import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
 import syncRoutes from './routes/sync.js';
 import webhookRoutes from './routes/webhooks.js';
-import uploadRoutes from './routes/upload.js'; // ✅ NEW
+import uploadRoutes from './routes/upload.js';
+import collectionsRoute from './routes/collections.js'; // ✅ NEW
 
 dotenv.config();
 const app = express();
@@ -39,12 +40,13 @@ app.get('/', (req, res) => {
 });
 
 // API Routes
-app.use('/auth', authRoutes);               // ✅ Public Shopify auth route
-app.use('/api/auth', authRoutes);           // ✅ Optional if used in frontend app logic
+app.use('/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api', syncRoutes);
 app.use('/api/webhooks', webhookRoutes);
-app.use('/api', uploadRoutes);              // ✅ NEW: Handles POST /api/upload-skus
+app.use('/api', uploadRoutes);
+app.use('/api/collections', collectionsRoute); // ✅ NEW: Collections endpoint
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
