@@ -54,7 +54,7 @@ export async function runSyncForShop(shop, token) {
     console.log(`📦 Loaded ${skuMap.length} SKU mappings from DB`);
     global.liveLogBuffer.push(`📦 Loaded ${skuMap.length} SKU mappings`);
 
-    const locationId = await getLocationId();
+    const locationId = await getLocationId(shop);
     global.liveLogBuffer.push(`📍 Shopify location ID: ${locationId}`);
 
     for (const item of skuMap) {
@@ -73,8 +73,8 @@ export async function runSyncForShop(shop, token) {
           continue;
         }
 
-        const inventoryItemId = await getInventoryItemId(shopify_variant_id);
-        await updateInventoryLevel(inventoryItemId, locationId, quantity);
+        const inventoryItemId = await getInventoryItemId(shop, shopify_variant_id);
+        await updateInventoryLevel(shop, inventoryItemId, locationId, quantity);
 
         appendLog({
           sku: ralawise_sku,
