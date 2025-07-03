@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const router = express.Router();
 
+// Upload raw SKU mapping
 router.post('/upload-skus', async (req, res) => {
   const { shop, skus } = req.body;
 
@@ -46,6 +47,7 @@ router.post('/upload-skus', async (req, res) => {
   }
 });
 
+// Auto-generate SKU mapping from Shopify products
 router.post('/generate-sku-map', async (req, res) => {
   const { shop } = req.body;
   if (!shop) return res.status(400).json({ error: 'Missing shop param' });
@@ -66,10 +68,15 @@ router.post('/generate-sku-map', async (req, res) => {
         if (!sku || !variant.id) continue;
 
         await db.query(
-          `INSERT INTO store_skus (shop_domain, sku, product_id, variant_id)
-           VALUES ($1, $2, $3, $4)
-           ON CONFLICT (shop_domain, variant_id)
-           DO UPDATE SET sku = EXCLUDED.sku, product_id = EXCLUDED.product_id`,
+          `INSERT INTO store_skus (
+            shop_domain, sku, ralawise_sku, product_id, variant_id
+          )
+          VALUES ($1, $2, $2, $3, $4)
+          ON CONFLICT (shop_domain, variant_id)
+          DO UPDATE SET
+            sku = EXCLUDED.sku,
+            ralawise_sku = EXCLUDED.ralawise_sku,
+            product_id = EXCLUDED.product_id`,
           [shop, sku, product.id, variant.id]
         );
 
