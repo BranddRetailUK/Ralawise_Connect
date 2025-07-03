@@ -14,22 +14,23 @@ router.get('/', async (req, res) => {
   if (!token) return res.status(403).json({ error: 'Missing token for shop' });
 
   try {
-    const response = await axios.get(
-      `https://${shop}/admin/api/2023-10/custom_collections.json`,
-      {
-        headers: {
-          'X-Shopify-Access-Token': token,
-        },
-      }
-    );
+    const [custom, smart] = await Promise.all([
+      axios.get(`https://${shop}/admin/api/2023-10/custom_collections.json`, {
+        headers: { 'X-Shopify-Access-Token': token },
+      }),
+      axios.get(`https://${shop}/admin/api/2023-10/smart_collections.json`, {
+        headers: { 'X-Shopify-Access-Token': token },
+      }),
+    ]);
 
-    const collections = response.data.custom_collections;
+    const collections = [...custom.data.custom_collections, ...smart.data.smart_collections];
 
     res.json(
       collections.map((c) => ({
         id: c.id,
         title: c.title,
         handle: c.handle,
+        product_count: c.products_count || 0,
       }))
     );
   } catch (err) {
