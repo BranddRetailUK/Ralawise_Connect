@@ -1,113 +1,130 @@
 // frontend/script.js
-console.log('🟢 script.js loaded');
+document.addEventListener('DOMContentLoaded', () => {
+  const tabButtons = document.querySelectorAll('.tab-btn');
+  const tabPages = document.querySelectorAll('.tab-page');
 
-const params = new URLSearchParams(window.location.search);
-const shop = params.get('shop');
-const host = params.get('host');
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tab = button.dataset.tab;
 
-if (window['app-bridge']) {
-  const AppBridge = window['app-bridge'];
-  const createApp = AppBridge.default;
-  const app = createApp({
-    apiKey: 'YOUR_API_KEY',
-    host,
-    forceRedirect: true
-  });
-}
+      // Toggle tab page visibility
+      tabPages.forEach(page => page.classList.add('hidden'));
+      document.getElementById(`tab-${tab}`).classList.remove('hidden');
 
-document.querySelectorAll('.sync-trigger').forEach(btn => {
-  btn.addEventListener('click', async () => {
-    try {
-      const res = await fetch(`http://localhost:3001/api/sync?shop=${shop}`);
-      const data = await res.json();
-      alert(data.message || '✅ Sync triggered');
-    } catch (err) {
-      alert('❌ Sync failed. See console for details.');
-      console.error(err);
-    }
-  });
-});
+      // Toggle button styles
+      tabButtons.forEach(btn => {
+        btn.classList.remove('bg-black', 'text-white');
+        btn.classList.add('bg-gray-200', 'text-black');
+      });
+      button.classList.remove('bg-gray-200', 'text-black');
+      button.classList.add('bg-black', 'text-white');
 
-async function loadProducts() {
-  try {
-    const res = await fetch(`http://localhost:3001/api/products?shop=${shop}`);
-    const data = await res.json();
-    const tableBody = document.querySelector('#productTable tbody');
-
-    if (!data.products || !Array.isArray(data.products)) {
-      tableBody.innerHTML = '<tr><td colspan="5" class="text-center py-4">No products found.</td></tr>';
-      return;
-    }
-
-    tableBody.innerHTML = '';
-    data.products.forEach(product => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-        <td class="px-4 py-3 flex items-center gap-3">
-          <img src="${product.image || 'https://via.placeholder.com/40'}" alt="Product" class="w-10 h-10 rounded border" />
-          <span>${product.title}</span>
-        </td>
-        <td class="px-4 py-3">${product.variants}</td>
-        <td class="px-4 py-3">
-          <span class="inline-block px-2 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded">Synced</span>
-        </td>
-        <td class="px-4 py-3">${new Date(product.updated_at).toLocaleString()}</td>
-        <td class="px-4 py-3 text-right">
-          <button class="text-sm text-blue-600 hover:underline">Resync</button>
-        </td>
-      `;
-      tableBody.appendChild(row);
-    });
-  } catch (err) {
-    console.error('❌ Failed to load products:', err);
-  }
-}
-
-async function loadSyncLogs() {
-  try {
-    const res = await fetch('http://localhost:3001/api/sync-logs');
-    const data = await res.json();
-    const list = document.querySelector('#tab-sync ul');
-    list.innerHTML = '';
-
-    data.logs.forEach(log => {
-      const li = document.createElement('li');
-      const time = new Date(log.time).toLocaleTimeString();
-      if (log.status === 'success') {
-        li.innerHTML = `<span class="text-green-600">✅</span> ${log.sku} synced (Qty ${log.quantity}) @ ${time}`;
+      if (tab === 'sync') {
+        loadSyncLogs();
+        startLiveLogPolling();
       } else {
-        li.innerHTML = `<span class="text-red-600">❌</span> Failed to sync ${log.sku}: ${log.error} @ ${time}`;
+        stopLiveLogPolling();
       }
-      list.appendChild(li);
+
+      if (tab === 'products') {
+        loadProducts();
+      }
     });
-  } catch (err) {
-    console.error('❌ Failed to load sync logs:', err);
-  }
-}
-
-const tabs = document.querySelectorAll('.tab-btn');
-const pages = document.querySelectorAll('.tab-page');
-
-tabs.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
-
-    tabs.forEach(t => {
-      t.classList.remove('bg-black', 'text-white');
-      t.classList.add('bg-gray-200', 'text-black');
-    });
-
-    btn.classList.remove('bg-gray-200', 'text-black');
-    btn.classList.add('bg-black', 'text-white');
-
-    pages.forEach(page => page.classList.add('hidden'));
-    document.getElementById(`tab-${tab}`).classList.remove('hidden');
-
-    if (tab === 'products') loadProducts();
-    if (tab === 'sync') loadSyncLogs();
   });
-});
 
-if (document.getElementById('tab-products')?.classList.contains('hidden') === false) {
-  loadProducts();
-}
+  let logPoller = null;
+
+  function startLiveLogPolling() {
+    if (logPoller) return;
+    logPoller = setInterval(async () => {
+      try {
+        const res = await fetch('http://localhost:3001/api/live-logs');
+        const { logs } = await res.json();
+        const list = document.getElementById('live-log-list');
+        list.innerHTML = '';
+        logs.forEach(line => {
+          const li = document.createElement('li');
+          li.textContent = line;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('❌ Failed to fetch live logs:', err);
+      }
+    }, 1000);
+  }
+
+  function stopLiveLogPolling() {
+    if (logPoller) {
+      clearInterval(logPoller);
+      logPoller = null;
+    }
+  }
+
+  async function loadSyncLogs() {
+    try {
+      const res = await fetch('http://localhost:3001/api/sync-logs');
+      const data = await res.json();
+      const list = document.getElementById('sync-log-list');
+      const lastSync = document.getElementById('last-sync-time');
+
+      list.innerHTML = '';
+
+      if (data.logs.length > 0) {
+        const timestamp = new Date(data.logs[0].time).toLocaleString();
+        lastSync.textContent = timestamp;
+      }
+
+      data.logs.forEach(log => {
+        const li = document.createElement('li');
+        if (log.status === 'success') {
+          li.innerHTML = `<span class="text-green-600">✅</span> ${log.sku} synced (Qty ${log.quantity})`;
+        } else {
+          li.innerHTML = `<span class="text-red-600">❌</span> Failed to sync ${log.sku}: ${log.error}`;
+        }
+        list.appendChild(li);
+      });
+    } catch (err) {
+      console.error('❌ Failed to load sync logs:', err);
+    }
+  }
+
+  async function loadProducts() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shop = urlParams.get('shop');
+    if (!shop) return;
+
+    const res = await fetch(`http://localhost:3001/products?shop=${shop}`);
+    const data = await res.json();
+    const container = document.getElementById('product-grid');
+    container.innerHTML = '';
+
+    data.products.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'rounded-lg border p-3 flex flex-col items-center text-center shadow';
+
+      const img = document.createElement('img');
+      img.src = product.image || 'https://via.placeholder.com/200';
+      img.alt = product.title;
+      img.className = 'w-full max-w-[150px] object-cover rounded mb-2';
+
+      const title = document.createElement('h3');
+      title.className = 'text-sm font-semibold';
+      title.textContent = product.title;
+
+      const variants = document.createElement('p');
+      variants.className = 'text-xs text-gray-500';
+      variants.textContent = `${product.variants.length} variant(s)`;
+
+      card.appendChild(img);
+      card.appendChild(title);
+      card.appendChild(variants);
+      container.appendChild(card);
+    });
+  }
+
+  // Default tab (deferred to ensure DOM is ready)
+  setTimeout(() => {
+    const defaultBtn = document.querySelector('.tab-btn[data-tab="products"]');
+    if (defaultBtn) defaultBtn.click();
+  }, 0);
+});

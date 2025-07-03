@@ -163,13 +163,25 @@
 
 <section id="tab-sync" class="tab-page hidden">
   <h2 class="text-xl font-semibold mb-2">Sync Status</h2>
+
   <p class="text-gray-500 mb-4">
     Last sync: <span class="text-black font-medium" id="last-sync-time">Loading...</span>
   </p>
+
+  <!-- Live Logs Viewer -->
+  <div class="bg-white border rounded p-3 mb-4 max-h-64 overflow-y-auto shadow-sm">
+    <ul id="live-log-list" class="text-sm text-gray-800 space-y-1">
+      <li class="italic text-gray-400">Live logs will appear here during sync...</li>
+    </ul>
+  </div>
+
+  <!-- Sync Summary -->
+  <h3 class="text-lg font-semibold mb-2">Recent Sync Log</h3>
   <ul id="sync-log-list" class="list-disc ml-6 text-sm space-y-1 text-gray-800">
     <!-- Logs will be dynamically inserted here -->
   </ul>
 </section>
+
 
 
 <section id="tab-map" class="tab-page hidden">
