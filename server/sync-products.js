@@ -3,19 +3,16 @@ import db from './db.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const SHOP = process.env.DEFAULT_SHOP;
-const TOKEN = process.env.SHOPIFY_ACCESS_TOKEN;
-
-async function fetchAllProducts() {
+export async function syncProductsToDB(shop, token) {
   const products = [];
-  let url = `https://${SHOP}/admin/api/2023-10/products.json?limit=250`;
+  let url = `https://${shop}/admin/api/2023-10/products.json?limit=250`;
   let page = 1;
 
   try {
     while (url) {
       const res = await axios.get(url, {
         headers: {
-          'X-Shopify-Access-Token': TOKEN,
+          'X-Shopify-Access-Token': token,
           'Content-Type': 'application/json',
         },
       });
@@ -37,13 +34,6 @@ async function fetchAllProducts() {
     console.error('❌ Error fetching products:', err.message || err);
   }
 
-  return products;
-}
-
-async function syncProductsToDB() {
-  const products = await fetchAllProducts();
-  const shopDomain = SHOP;
-
   for (const product of products) {
     for (const variant of product.variants) {
       const query = `
@@ -55,7 +45,7 @@ async function syncProductsToDB() {
       `;
 
       const values = [
-        shopDomain,
+        shop,
         product.id,
         variant.id,
         variant.sku,
@@ -75,5 +65,3 @@ async function syncProductsToDB() {
 
   console.log(`🎉 Sync complete: ${products.length} products processed.`);
 }
-
-syncProductsToDB();

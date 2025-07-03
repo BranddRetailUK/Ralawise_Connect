@@ -46,12 +46,6 @@ export async function getAccessToken(shop) {
       return result.rows[0].access_token;
     }
 
-    // Optional fallback (should now be removed in prod)
-    if (shop === 'ggappareluk.myshopify.com' && process.env.SHOPIFY_ACCESS_TOKEN) {
-      console.warn(`⚠️ Using fallback token for ${shop} (from env)`);
-      return process.env.SHOPIFY_ACCESS_TOKEN;
-    }
-
     console.warn(`⚠️ No token found for ${shop}`);
     return null;
   } catch (err) {
