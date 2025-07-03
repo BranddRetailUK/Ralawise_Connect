@@ -41,7 +41,7 @@ export async function getRalawiseStock(sku) {
   try {
     const res = await axios.get(url, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       }
     });
 
@@ -54,7 +54,7 @@ export async function getRalawiseStock(sku) {
 
     const result = {
       sku: variant.sku || null,
-      quantity: variant.availableStock?.quantity ?? null
+      quantity: variant.availableStock?.quantity ?? null,
     };
 
     console.log(`📦 Parsed Ralawise stock:`, result);

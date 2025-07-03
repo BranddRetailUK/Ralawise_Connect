@@ -1,6 +1,5 @@
-// index.js (batch-enabled)
-
-import { getStock } from './ralawise.js';
+// src/index.js
+import { getRalawiseStock } from './ralawise.js';
 import {
   getLocationId,
   getInventoryItemId,
@@ -22,7 +21,7 @@ async function syncAll(batchIndex = 0, totalBatches = 1) {
     try {
       console.log(`\n🔁 Syncing SKU: ${item.ralawise_sku}...`);
 
-      const { sku, quantity } = await getStock(item.ralawise_sku);
+      const { sku, quantity } = await getRalawiseStock(item.ralawise_sku);
       console.log(`📦 Ralawise response: SKU ${sku}, Quantity ${quantity}`);
 
       if (!sku || quantity === null) {
@@ -36,7 +35,6 @@ async function syncAll(batchIndex = 0, totalBatches = 1) {
       await updateInventoryLevel(inventoryItemId, locationId, quantity);
       console.log(`✅ Stock updated → SKU: ${sku}, Qty: ${quantity}`);
 
-      // Shopify max: 2 requests/sec → use ~1.1s delay to stay safe
       await new Promise(res => setTimeout(res, 1100));
     } catch (err) {
       if (err.response?.status === 429) {
@@ -60,8 +58,6 @@ async function syncAll(batchIndex = 0, totalBatches = 1) {
   console.log(`\n✅ Batch ${batchIndex + 1}/${totalBatches} complete.\n`);
 }
 
-// Entry point for Railway Jobs with env vars like:
-// BATCH_INDEX=0 TOTAL_BATCHES=3 npm start
 const batchIndex = parseInt(process.env.BATCH_INDEX || '0');
 const totalBatches = parseInt(process.env.TOTAL_BATCHES || '1');
 
