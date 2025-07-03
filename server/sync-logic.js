@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { updateInventoryLevel } from './shopify.js';
-import { getRalawiseStock } from './ralawise.js';
+import { getRalawiseStock } from '../src/ralawise.js'; // ✅ updated path
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
