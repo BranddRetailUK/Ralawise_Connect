@@ -25,15 +25,15 @@ template-womens-premium-t-shirt,,,lilac,,xs-8,BB012LILAXS
 template-womens-premium-t-shirt,,,heather-grey,,xs-8,BB012HGREXS
 template-womens-premium-t-shirt,,,charcoal,,xs-8,BB012CHARXS
 template-womens-premium-t-shirt,TEMPLATE | Women's Premium T-Shirt,Colour,black,Size,xs-8,BB012BLACXS
-template-kids-t-shirt,,,white-1,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,purple,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,navy,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,light-pink,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,light-blue,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,khaki,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,hot-pink,,xs-3-4,'-GD01B
-template-kids-t-shirt,,,charcoal,,xs-3-4,'-GD01B
-template-kids-t-shirt,TEMPLATE | Kids T-Shirt,Colour,black,Size,xs-3-4,'-GD01B
+template-kids-t-shirt,,,white-1,,xs-3-4,GD01BWHITXS
+template-kids-t-shirt,,,purple,,xs-3-4,GD01BPURPXS
+template-kids-t-shirt,,,navy,,xs-3-4,GD01BNAVYXS
+template-kids-t-shirt,,,light-pink,,xs-3-4,GD01BLPINXS
+template-kids-t-shirt,,,light-blue,,xs-3-4,GD01BLBLUXS
+template-kids-t-shirt,,,khaki,,xs-3-4,
+template-kids-t-shirt,,,hot-pink,,xs-3-4,
+template-kids-t-shirt,,,charcoal,,xs-3-4,GD01BCHARXS
+template-kids-t-shirt,TEMPLATE | Kids T-Shirt,Colour,black,Size,xs-3-4,GD01BBLACXS
 template-tie-dye-hoodie,,,tie-dye-swirl,,xs,'-JH022
 template-tie-dye-hoodie,,,pastel-sunset-dip,,xs,'-JH022
 template-tie-dye-hoodie,,,grey-pink-marble,,xs,'-JH022
@@ -45,11 +45,11 @@ template-signature-hoodie,,,deep-navy,,xs,'-AM01
 template-signature-hoodie,TEMPLATE | Signature Hoodie,Colour,black,Size,xs,'-AM01
 template-signature-hoodie,,,arctic-white,,xs,'-AM01
 template-premium-t-shirt,,,white,,xs,BB010WHITXS
-template-premium-t-shirt,,,purple,,xs,AM010PURPXS
-template-premium-t-shirt,,,light-pink,,xs,AM010PINKXS
+template-organic-tee,TEMPLATE | Organic Tee,Size,xs,Colour,Black,AM010NVMAXL
+template-organic-tee,,,xs,,Black Marl,AM010BKMAXS
 template-premium-t-shirt,,,light-blue,,xs,BB010OCBLXS
 template-premium-t-shirt,,,khaki,,xs,BB010OLIVXS
-template-premium-t-shirt,,,hot-pink,,xs,AM010HOPKXS
+template-organic-tee,,,xs,,Desert Sand,AM010DSANXS
 template-premium-t-shirt,,,deep-navy,,xs,BB010NAVYXS
 template-premium-t-shirt,,,charcoal,,xs,BB010CHARXS
 template-premium-t-shirt,TEMPLATE | Premium T-Shirt,Colour,black,Size,xs,BB010BLACXS
@@ -137,20 +137,20 @@ template-signature-hoodie,,,deep-navy,,xl,
 template-signature-heavy-joggers,,,heather-grey,,xl,'-BY014
 template-signature-heavy-joggers,,,black,,xl,'-BY014
 template-premium-t-shirt,,,white,,xl,BB010WHITXL
-template-premium-t-shirt,,,purple,,xl,AM010PURPXL
-template-premium-t-shirt,,,light-pink,,xl,AM010PINKXL
+template-organic-tee,,,xs,,Khaki,AM010KHAKXS
+template-organic-tee,,,xs,,Navy Marl,AM010NVMA4XL
 template-premium-t-shirt,,,light-blue,,xl,BB010OCBLXL
 template-premium-t-shirt,,,khaki,,xl,BB010OLIVXL
-template-premium-t-shirt,,,hot-pink,,xl,AM010HOPKXL
+template-organic-tee,,,xs,,White,AM010WHITXS
 template-premium-t-shirt,,,deep-navy,,xl,BB010NAVYXL
 template-premium-t-shirt,,,charcoal,,xl,BB010CHARXL
 template-premium-t-shirt,,,black,,xl,BB010BLACXL
-template-premium-joggers,,,navy,,xl,'-SX773
-template-premium-joggers,,,latte,,xl,'-SX773
-template-premium-joggers,,,khaki,,xl,'-SX773
-template-premium-joggers,,,heather-grey,,xl,'-SX773
-template-premium-joggers,,,cool-heather,,xl,'-SX773
-template-premium-joggers,,,black,,xl,'-SX773
+template-premium-joggers,,,navy,,xl,SX773FNAVXL
+template-premium-joggers,,,latte,,xl,SX773LATTXL
+template-premium-joggers,,,khaki,,xl,SX773KHAKXL
+template-premium-joggers,,,heather-grey,,xl,SX773HGREXL
+template-premium-joggers,,,cool-heather,,xl,SX773CHGYXL
+template-premium-joggers,,,black,,xl,SX773BLACXL
 template-premium-joggers,,,stargazer,,xl,
 template-premium-joggers,,,natural,,xl,
 template-premium-hoodie,,,charcoal,,xl,JH001STGYXL
@@ -257,16 +257,16 @@ template-vintage-organic-tee,,,m,,White,'-AM028
 template-vintage-organic-tee,,,s,,White,'-AM023
 template-vintage-organic-tee,,,xs,,White,'-AM018
 template-vintage-organic-tee,,,2xs,,White,'-AM013
-template-organic-tee,,,xs,,White,AM010WHITXS
+template-organic-tee,,,xl,,Black Marl,AM010BKMAXL
+template-organic-tee,,,xl,,Desert Sand,AM010DSANXL
+template-organic-tee,,,xl,,Khaki,AM010KHAKXL
 template-organic-tee,,,xl,,White,AM010WHITXL
+template-organic-tee,,,s,,Black Marl,AM010BKMAS
+template-organic-tee,,,s,,Desert Sand,AM010DSANS
+template-organic-tee,,,s,,Grey Marl,AM010GMARS
+template-organic-tee,,,s,,Hot Pink,AM010HOPKS
+template-organic-tee,,,s,,Khaki,AM010KHAKS
 template-organic-tee,,,s,,White,AM010WHITS
-template-organic-tee,,,m,,White,AM010WHITM
-template-organic-tee,,,l,,White,AM010WHITL
-template-organic-tee,,,6xl,,White,AM010WHIT6XL
-template-organic-tee,,,5xl,,White,AM010WHIT5XL
-template-organic-tee,,,4xl,,White,AM010WHIT4XL
-template-organic-tee,,,3xl,,White,AM010WHIT3XL
-template-organic-tee,,,2xl,,White,AM010WHIT2XL
 template-baby-body-shuit,,,6-12-months-1,,White,'-LW55T
 template-baby-body-shuit,,,3-6-months,,White,'-LW55T
 template-baby-body-shuit,,,12-18-months,,White,'-LW55T
@@ -334,20 +334,20 @@ template-signature-hoodie,,,deep-navy,,s,
 template-signature-heavy-joggers,TEMPLATE | Heavy Joggers,Colour,heather-grey,Size,s,'-BY014
 template-signature-heavy-joggers,,,black,,s,'-BY014
 template-premium-t-shirt,,,white,,s,BB010WHITS
-template-premium-t-shirt,,,purple,,s,AM010PURPS
-template-premium-t-shirt,,,light-pink,,s,AM010PINKS
+template-premium-t-shirt,,,purple,,2xl,AM010PURP2XL
+template-premium-t-shirt,,,purple,,3xl,AM010PURP3XL
 template-premium-t-shirt,,,light-blue,,s,BB010OCBLS
 template-premium-t-shirt,,,khaki,,s,BB010OLIVS
-template-premium-t-shirt,,,hot-pink,,s,AM010HOPKS
+template-premium-t-shirt,,,purple,,4xl,AM010PURP4XL
 template-premium-t-shirt,,,deep-navy,,s,BB010NAVYS
 template-premium-t-shirt,,,charcoal,,s,BB010CHARS
 template-premium-t-shirt,,,black,,s,BB010BLACS
-template-premium-joggers,,,navy,,s,'-SX773
-template-premium-joggers,,,latte,,s,'-SX773
-template-premium-joggers,,,khaki,,s,'-SX773
-template-premium-joggers,,,heather-grey,,s,'-SX773
-template-premium-joggers,,,cool-heather,,s,'-SX773
-template-premium-joggers,,,black,,s,'-SX773
+template-premium-joggers,,,navy,,s,SX773FNAVS
+template-premium-joggers,,,latte,,s,SX773LATTS
+template-premium-joggers,,,khaki,,s,SX773KHAKS
+template-premium-joggers,,,heather-grey,,s,SX773HGRES
+template-premium-joggers,,,cool-heather,,s,SX773CHGYS
+template-premium-joggers,,,black,,s,SX773BLACS
 template-premium-joggers,,,stargazer,,s,
 template-premium-joggers,,,natural,,s,
 template-premium-hoodie,,,charcoal,,s,JH001STGYS
@@ -430,7 +430,7 @@ template-womens-full-zip-hoodie,,,s-10,,pink,'-AM004
 template-womens-full-zip-hoodie,,,m-12,,pink,'-AM004
 template-womens-full-zip-hoodie,,,l-14,,pink,'-AM004
 template-womens-full-zip-hoodie,,,2-xl-18,,pink,'-AM004
-template-organic-tee,,,4xl,,Pink,AM010PINKS
+template-premium-t-shirt,,,purple,,5xl,AM010PURP5XL
 template-organic-tee,,,xs,,Pink,
 template-organic-tee,,,xl,,Pink,
 template-organic-tee,,,s,,Pink,
@@ -457,11 +457,11 @@ template-raglan-pullover-hood,,,m,,navy-burgundy,
 template-raglan-pullover-hood,,,l,,navy-burgundy,
 template-raglan-pullover-hood,,,3xl,,navy-burgundy,
 template-raglan-pullover-hood,,,2xl,,navy-burgundy,
-template-organic-tee,,,xs,,Navy Marl,AM010NVMA4XL
-template-organic-tee,,,m,,Navy Marl,'-AM010
-template-organic-tee,,,6xl,,Navy Marl,'-AM010
-template-organic-tee,,,5xl,,Navy Marl,'-AM010
-template-organic-tee,,,2xl,,Navy Marl,'-AM010
+template-premium-t-shirt,,,purple,,l,AM010PURPL
+template-premium-t-shirt,,,purple,,m,AM010PURPM
+template-premium-t-shirt,,,purple,,s,AM010PURPS
+template-premium-t-shirt,,,purple,,xl,AM010PURPXL
+template-premium-t-shirt,,,purple,,xs,AM010PURPXS
 template-organic-tee,,,xl,,Navy Marl,
 template-organic-tee,,,s,,Navy Marl,
 template-organic-tee,,,l,,Navy Marl,
@@ -526,20 +526,20 @@ template-signature-hoodie,,,natural-raw,,m,
 template-signature-heavy-joggers,,,heather-grey,,m,'-BY014
 template-signature-heavy-joggers,,,black,,m,'-BY014
 template-premium-t-shirt,,,white,,m,BB010WHITM
-template-premium-t-shirt,,,purple,,m,AM010PURPM
-template-premium-t-shirt,,,light-pink,,m,AM010PINKM
+template-organic-tee,,,m,,Black Marl,AM010BKMAM
+template-organic-tee,,,m,,Desert Sand,AM010DSANM
 template-premium-t-shirt,,,light-blue,,m,BB010OCBLM
 template-premium-t-shirt,,,khaki,,m,BB010OLIVM
-template-premium-t-shirt,,,hot-pink,,m,AM010HOPKM
+template-organic-tee,,,m,,Khaki,AM010KHAKM
 template-premium-t-shirt,,,deep-navy,,m,BB010NAVYM
 template-premium-t-shirt,,,charcoal,,m,BB010CHARM
 template-premium-t-shirt,,,black,,m,BB010BLACM
-template-premium-joggers,,,navy,,m,'-SX773
-template-premium-joggers,,,latte,,m,'-SX773
-template-premium-joggers,,,khaki,,m,'-SX773
-template-premium-joggers,,,heather-grey,,m,'-SX773
-template-premium-joggers,,,cool-heather,,m,'-SX773
-template-premium-joggers,,,black,,m,'-SX773
+template-premium-joggers,,,navy,,m,SX773FNAVM
+template-premium-joggers,,,latte,,m,SX773LATTM
+template-premium-joggers,,,khaki,,m,SX773KHAKM
+template-premium-joggers,,,heather-grey,,m,SX773HGREM
+template-premium-joggers,,,cool-heather,,m,SX773CHGYM
+template-premium-joggers,,,black,,m,SX773BLACM
 template-premium-joggers,,,stargazer,,m,
 template-premium-joggers,,,natural,,m,
 template-premium-hoodie,,,charcoal,,m,JH001STGYM
@@ -618,11 +618,11 @@ template-baby-zip-thru-hoodie,,,6-12-months-1,,light-blue,'-SX229
 template-baby-zip-thru-hoodie,,,24-36-months-1,,light-blue,'-SX229
 template-baby-zip-thru-hoodie,,,18-24-months,,light-blue,'-SX229
 template-baby-zip-thru-hoodie,,,12-18-months,,light-blue,'-SX229
-template-organic-tee,,,4xl,,Light Blue,AM010PINKM
 template-organic-tee,,,m,,Light Blue,AM010LBLUM
-template-organic-tee,,,l,,Light Blue,AM010LBLUL
-template-organic-tee,,,6xl,,Light Blue,AM010LBLU6XL
-template-organic-tee,,,3xl,,Light Blue,AM010LBLU3XL
+template-organic-tee,,,m,,Navy Marl,AM010NVMAM
+template-organic-tee,,,m,,White,AM010WHITM
+template-premium-t-shirt,,,light-pink,,2xl,AM010PINK2XL
+template-premium-t-shirt,,,light-pink,,3xl,AM010PINK3XL
 template-organic-tee,,,xs,,Light Blue,
 template-organic-tee,,,xl,,Light Blue,
 template-organic-tee,,,s,,Light Blue,
@@ -669,20 +669,20 @@ template-signature-hoodie,,,natural-raw,,l,
 template-signature-heavy-joggers,,,heather-grey,,l,'-BY014
 template-signature-heavy-joggers,,,black,,l,'-BY014
 template-premium-t-shirt,,,white,,l,BB010WHITL
-template-premium-t-shirt,,,purple,,l,AM010PURPL
-template-premium-t-shirt,,,light-pink,,l,AM010PINKL
+template-premium-t-shirt,,,light-pink,,4xl,AM010PINK4XL
+template-premium-t-shirt,,,light-pink,,5xl,AM010PINK5XL
 template-premium-t-shirt,,,light-blue,,l,BB010OCBLL
 template-premium-t-shirt,,,khaki,,l,BB010OLIVL
-template-premium-t-shirt,,,hot-pink,,l,AM010HOPKL
+template-premium-t-shirt,,,light-pink,,l,AM010PINKL
 template-premium-t-shirt,,,deep-navy,,l,BB010NAVYL
 template-premium-t-shirt,,,charcoal,,l,BB010CHARL
 template-premium-t-shirt,,,black,,l,BB010BLACL
-template-premium-joggers,,,navy,,l,'-SX773
-template-premium-joggers,,,latte,,l,'-SX773
-template-premium-joggers,,,khaki,,l,'-SX773
-template-premium-joggers,,,heather-grey,,l,'-SX773
-template-premium-joggers,,,cool-heather,,l,'-SX773
-template-premium-joggers,,,black,,l,'-SX773
+template-premium-joggers,,,navy,,l,SX773FNAVL
+template-premium-joggers,,,latte,,l,SX773LATTL
+template-premium-joggers,,,khaki,,l,SX773KHAKL
+template-premium-joggers,,,heather-grey,,l,SX773HGREL
+template-premium-joggers,,,cool-heather,,l,SX773CHGYL
+template-premium-joggers,,,black,,l,SX773BLACL
 template-premium-joggers,,,stargazer,,l,
 template-premium-joggers,,,natural,,l,
 template-premium-hoodie,,,charcoal,,l,JH001STGYL
@@ -755,27 +755,27 @@ template-premium-sweatshirt,,,m,,khaki,'-JH030
 template-premium-sweatshirt,,,l,,khaki,'-JH030
 template-premium-sweatshirt,,,3xl,,khaki,'-JH030
 template-premium-sweatshirt,,,2xl,,khaki,'-JH030
-template-organic-tee,,,xs,,Khaki,'-AM010
-template-organic-tee,,,xl,,Khaki,'-AM010
-template-organic-tee,,,s,,Khaki,'-AM010
-template-organic-tee,,,m,,Khaki,'-AM010
-template-organic-tee,,,l,,Khaki,'-AM010
-template-organic-tee,,,6xl,,Khaki,'-AM010
-template-organic-tee,,,5xl,,Khaki,'-AM010
-template-organic-tee,,,4xl,,Khaki,'-AM010
-template-organic-tee,,,3xl,,Khaki,'-AM010
-template-organic-tee,,,2xl,,Khaki,'-AM010
+template-premium-t-shirt,,,light-pink,,m,AM010PINKM
+template-premium-t-shirt,,,light-pink,,s,AM010PINKS
+template-premium-t-shirt,,,light-pink,,xl,AM010PINKXL
+template-premium-t-shirt,,,light-pink,,xs,AM010PINKXS
+template-organic-tee,,,l,,Black Marl,AM010BKMAL
+template-organic-tee,,,l,,Desert Sand,AM010DSANL
+template-organic-tee,,,l,,Khaki,AM010KHAKL
+template-organic-tee,,,l,,Light Blue,AM010LBLUL
+template-organic-tee,,,l,,White,AM010WHITL
+template-premium-t-shirt,,,hot-pink,,2xl,AM010HOPK2XL
 template-premium-sweatshirt,,,xl,,hot-pink,'-JH030
 template-premium-sweatshirt,,,s,,hot-pink,'-JH030
 template-premium-sweatshirt,,,m,,hot-pink,'-JH030
 template-premium-sweatshirt,,,l,,hot-pink,'-JH030
 template-premium-sweatshirt,,,3xl,,hot-pink,'-JH030
 template-premium-sweatshirt,,,2xl,,hot-pink,'-JH030
-template-organic-tee,,,4xl,,Hot Pink,AM010PINKXL
-template-organic-tee,,,s,,Hot Pink,'-AM010
-template-organic-tee,,,6xl,,Hot Pink,'-AM010
-template-organic-tee,,,5xl,,Hot Pink,'-AM010
-template-organic-tee,,,2xl,,Hot Pink,'-AM010
+template-premium-t-shirt,,,hot-pink,,3xl,AM010HOPK3XL
+template-premium-t-shirt,,,hot-pink,,4xl,AM010HOPK4XL
+template-premium-t-shirt,,,hot-pink,,5xl,AM010HOPK5XL
+template-premium-t-shirt,,,hot-pink,,l,AM010HOPKL
+template-premium-t-shirt,,,hot-pink,,m,AM010HOPKM
 template-organic-tee,,,xs,,Hot Pink,
 template-organic-tee,,,xl,,Hot Pink,
 template-organic-tee,,,m,,Hot Pink,
@@ -830,11 +830,11 @@ template-womens-hoodie,,,s-10,,Grey Marl,'-AM003
 template-womens-hoodie,,,m-12,,Grey Marl,'-AM003
 template-womens-hoodie,,,l-14,,Grey Marl,'-AM003
 template-womens-hoodie,,,2-xl-18,,Grey Marl,'-AM003
-template-organic-tee,,,4xl,,Grey Marl,AM010PINKL
-template-organic-tee,,,s,,Grey Marl,'-AM010
-template-organic-tee,,,6xl,,Grey Marl,'-AM010
-template-organic-tee,,,5xl,,Grey Marl,'-AM010
-template-organic-tee,,,2xl,,Grey Marl,'-AM010
+template-premium-t-shirt,,,hot-pink,,s,AM010HOPKS
+template-premium-t-shirt,,,hot-pink,,xl,AM010HOPKXL
+template-premium-t-shirt,,,hot-pink,,xs,AM010HOPKXS
+template-organic-tee,,,6xl,,Black Marl,AM010BKMA6XL
+template-organic-tee,,,6xl,,Desert Sand,AM010DSAN6XL
 template-organic-tee,,,xs,,Grey Marl,
 template-organic-tee,,,xl,,Grey Marl,
 template-organic-tee,,,m,,Grey Marl,
@@ -860,16 +860,16 @@ template-vintage-organic-tee,,,m,,Desert Sand,'-AM026
 template-vintage-organic-tee,,,s,,Desert Sand,'-AM021
 template-vintage-organic-tee,,,xs,,Desert Sand,'-AM016
 template-vintage-organic-tee,,,2xs,,Desert Sand,'-AM011
-template-organic-tee,,,xs,,Desert Sand,'-AM010
-template-organic-tee,,,xl,,Desert Sand,'-AM010
-template-organic-tee,,,s,,Desert Sand,'-AM010
-template-organic-tee,,,m,,Desert Sand,'-AM010
-template-organic-tee,,,l,,Desert Sand,'-AM010
-template-organic-tee,,,6xl,,Desert Sand,'-AM010
-template-organic-tee,,,5xl,,Desert Sand,'-AM010
-template-organic-tee,,,4xl,,Desert Sand,'-AM010
-template-organic-tee,,,3xl,,Desert Sand,'-AM010
-template-organic-tee,,,2xl,,Desert Sand,'-AM010
+template-organic-tee,,,6xl,,Grey Marl,AM010GMAR6XL
+template-organic-tee,,,6xl,,Hot Pink,AM010HOPK6XL
+template-organic-tee,,,6xl,,Khaki,AM010KHAK6XL
+template-organic-tee,,,6xl,,Light Blue,AM010LBLU6XL
+template-organic-tee,,,6xl,,Navy Marl,AM010NVMA6XL
+template-organic-tee,,,6xl,,White,AM010WHIT6XL
+template-organic-tee,,,5xl,,Black,AM010PINK2XL
+template-organic-tee,,,5xl,,Black Marl,AM010BKMA5XL
+template-organic-tee,,,5xl,,Desert Sand,AM010DSAN5XL
+template-organic-tee,,,5xl,,Grey Marl,AM010GMAR5XL
 template-womens-v-neck-t-shirt,,,xl-14,,deep-navy,GD078NAVYXL
 template-womens-v-neck-t-shirt,,,s-6-8,,deep-navy,GD078NAVYS
 template-womens-v-neck-t-shirt,,,m-8-10,,deep-navy,GD078NAVYM
@@ -1008,17 +1008,17 @@ template-vintage-organic-tee,,,l,,Black Marl,'-AM030
 template-vintage-organic-tee,,,m,,Black Marl,'-AM025
 template-vintage-organic-tee,,,s,,Black Marl,'-AM020
 template-vintage-organic-tee,,,xs,,Black Marl,'-AM015
-template-vintage-organic-tee,TEMPLATE | Organic Vintage Tee,Size,2xs,Colour,Black Marl,'-AM010
-template-organic-tee,,,xs,,Black Marl,AM010BKMAXS
-template-organic-tee,,,xl,,Black Marl,AM010BKMAXL
-template-organic-tee,,,s,,Black Marl,AM010BKMAS
-template-organic-tee,,,m,,Black Marl,AM010BKMAM
-template-organic-tee,,,l,,Black Marl,AM010BKMAL
-template-organic-tee,,,6xl,,Black Marl,AM010BKMA6XL
-template-organic-tee,,,5xl,,Black Marl,AM010BKMA5XL
+template-organic-tee,,,5xl,,Hot Pink,AM010HOPK5XL
+template-organic-tee,,,5xl,,Khaki,AM010KHAK5XL
+template-organic-tee,,,5xl,,Navy Marl,AM010NVMA5XL
+template-organic-tee,,,5xl,,White,AM010WHIT5XL
 template-organic-tee,,,4xl,,Black Marl,AM010BKMA4XL
-template-organic-tee,,,3xl,,Black Marl,AM010BKMA3XL
-template-organic-tee,,,2xl,,Black Marl,AM010BKMA2XL
+template-organic-tee,,,4xl,,Desert Sand,AM010DSAN4XL
+template-organic-tee,,,4xl,,Grey Marl,AM010PINKL
+template-organic-tee,,,4xl,,Hot Pink,AM010PINKXL
+template-organic-tee,,,4xl,,Khaki,AM010KHAK4XL
+template-organic-tee,,,4xl,,Light Blue,AM010PINKM
+template-organic-tee,,,4xl,,Pink,AM010PINKS
 template-womens-v-neck-t-shirt,,,xl-14,,black,GD078BLACXL
 template-womens-v-neck-t-shirt,TEMPLATE | Women's V-Neck T-Shirt,Size,s-6-8,Colour,black,GD078BLACS
 template-womens-v-neck-t-shirt,,,m-8-10,,black,GD078BLACM
@@ -1030,8 +1030,8 @@ template-womens-hoodie,,,s-10,,Black,'-AM003
 template-womens-hoodie,,,m-12,,Black,'-AM003
 template-womens-hoodie,,,l-14,,Black,'-AM003
 template-womens-hoodie,,,2-xl-18,,Black,'-AM003
-template-organic-tee,,,5xl,,Black,AM010PINK2XL
-template-organic-tee,TEMPLATE | Organic Tee,Size,xs,Colour,Black,AM010NVMAXL
+template-organic-tee,,,4xl,,White,AM010WHIT4XL
+template-organic-tee,,,3xl,,Black Marl,AM010BKMA3XL
 template-organic-tee,,,xl,,Black,
 template-organic-tee,,,s,,Black,
 template-organic-tee,,,m,,Black,
@@ -1080,11 +1080,11 @@ template-signature-hoodie,,,deep-navy,,5xl,
 template-signature-heavy-joggers,,,heather-grey,,5xl,'-BY014
 template-signature-heavy-joggers,,,black,,5xl,'-BY014
 template-premium-t-shirt,,,white,,5xl,BB010WHIT5XL
-template-premium-t-shirt,,,purple,,5xl,AM010PURP5XL
-template-premium-t-shirt,,,light-pink,,5xl,AM010PINK5XL
+template-organic-tee,,,3xl,,Desert Sand,AM010DSAN3XL
+template-organic-tee,,,3xl,,Khaki,AM010KHAK3XL
 template-premium-t-shirt,,,light-blue,,5xl,BB010OCBL5XL
 template-premium-t-shirt,,,khaki,,5xl,BB010OLIV5XL
-template-premium-t-shirt,,,hot-pink,,5xl,AM010HOPK5XL
+template-organic-tee,,,3xl,,Light Blue,AM010LBLU3XL
 template-premium-t-shirt,,,deep-navy,,5xl,BB010NAVY5XL
 template-premium-t-shirt,,,charcoal,,5xl,BB010CHAR5XL
 template-premium-t-shirt,,,black,,5xl,BB010BLAC5XL
@@ -1142,11 +1142,10 @@ template-signature-hoodie,,,arctic-white,,4xl,'-AM01
 template-signature-heavy-joggers,,,heather-grey,,4xl,'-BY014
 template-signature-heavy-joggers,,,black,,4xl,'-BY014
 template-premium-t-shirt,,,white,,4xl,BB010WHIT4XL
-template-premium-t-shirt,,,purple,,4xl,AM010PURP4XL
-template-premium-t-shirt,,,light-pink,,4xl,AM010PINK4XL
+template-organic-tee,,,3xl,,White,AM010WHIT3XL
 template-premium-t-shirt,,,light-blue,,4xl,BB010OCBL4XL
 template-premium-t-shirt,,,khaki,,4xl,BB010OLIV4XL
-template-premium-t-shirt,,,hot-pink,,4xl,AM010HOPK4XL
+template-organic-tee,,,2xl,,Black Marl,AM010BKMA2XL
 template-premium-t-shirt,,,deep-navy,,4xl,BB010NAVY4XL
 template-premium-t-shirt,,,charcoal,,4xl,BB010CHAR4XL
 template-premium-t-shirt,,,black,,4xl,BB010BLAC4XL
@@ -1204,20 +1203,20 @@ template-signature-hoodie,,,deep-navy,,3xl,
 template-signature-heavy-joggers,,,heather-grey,,3xl,'-BY014
 template-signature-heavy-joggers,,,black,,3xl,'-BY014
 template-premium-t-shirt,,,white,,3xl,BB010WHIT3XL
-template-premium-t-shirt,,,purple,,3xl,AM010PURP3XL
-template-premium-t-shirt,,,light-pink,,3xl,AM010PINK3XL
+template-organic-tee,,,2xl,,Desert Sand,AM010DSAN2XL
+template-organic-tee,,,2xl,,Grey Marl,AM010GMAR2XL
 template-premium-t-shirt,,,light-blue,,3xl,BB010OCBL3XL
 template-premium-t-shirt,,,khaki,,3xl,BB010OLIV3XL
-template-premium-t-shirt,,,hot-pink,,3xl,AM010HOPK3XL
+template-organic-tee,,,2xl,,Hot Pink,AM010HOPK2XL
 template-premium-t-shirt,,,deep-navy,,3xl,BB010NAVY3XL
 template-premium-t-shirt,,,charcoal,,3xl,BB010CHAR3XL
 template-premium-t-shirt,,,black,,3xl,BB010BLAC3XL
-template-premium-joggers,,,navy,,3xl,'-SX773
-template-premium-joggers,,,latte,,3xl,'-SX773
-template-premium-joggers,,,khaki,,3xl,'-SX773
-template-premium-joggers,,,heather-grey,,3xl,'-SX773
-template-premium-joggers,,,cool-heather,,3xl,'-SX773
-template-premium-joggers,,,black,,3xl,'-SX773
+template-premium-joggers,,,navy,,3xl,SX773FNAV3XL
+template-premium-joggers,,,latte,,3xl,SX773LATT3XL
+template-premium-joggers,,,khaki,,3xl,SX773KHAK3XL
+template-premium-joggers,,,heather-grey,,3xl,SX773HGRE3XL
+template-premium-joggers,,,cool-heather,,3xl,SX773CHGY3XL
+template-premium-joggers,,,black,,3xl,SX773BLAC3XL
 template-premium-joggers,,,stargazer,,3xl,
 template-premium-joggers,,,natural,,3xl,
 template-premium-hoodie,,,charcoal,,3xl,JH001STGY3XL
@@ -1298,19 +1297,19 @@ template-signature-hoodie,,,natural-raw,,2xl,
 template-signature-heavy-joggers,,,heather-grey,,2xl,'-BY014
 template-signature-heavy-joggers,,,black,,2xl,'-BY014
 template-premium-t-shirt,,,white,,2xl,BB010WHIT2XL
-template-premium-t-shirt,,,purple,,2xl,AM010PURP2XL
-template-premium-t-shirt,,,light-pink,,2xl,AM010PINK2XL
+template-organic-tee,,,2xl,,Khaki,AM010KHAK2XL
+template-organic-tee,,,2xl,,Navy Marl,AM010NVMA2XL
 template-premium-t-shirt,,,light-blue,,2xl,BB010OCBL2XL
 template-premium-t-shirt,,,khaki,,2xl,BB010OLIV2XL
-template-premium-t-shirt,,,hot-pink,,2xl,AM010HOPK2XL
+template-organic-tee,,,2xl,,White,AM010WHIT2XL
 template-premium-t-shirt,,,deep-navy,,2xl,BB010NAVY2XL
 template-premium-t-shirt,,,charcoal,,2xl,BB010CHAR2XL
 template-premium-t-shirt,,,black,,2xl,BB010BLAC2XL
-template-premium-joggers,,,navy,,2xl,'-SX773
-template-premium-joggers,,,khaki,,2xl,'-SX773
-template-premium-joggers,,,heather-grey,,2xl,'-SX773
-template-premium-joggers,,,cool-heather,,2xl,'-SX773
-template-premium-joggers,,,black,,2xl,'-SX773
+template-premium-joggers,,,navy,,2xl,SX773FNAV2XL
+template-premium-joggers,,,khaki,,2xl,SX773KHAK2XL
+template-premium-joggers,,,heather-grey,,2xl,SX773HGRE2XL
+template-premium-joggers,,,cool-heather,,2xl,SX773CHGY2XL
+template-premium-joggers,,,black,,2xl,SX773BLAC2XL
 template-premium-joggers,,,stargazer,,2xl,
 template-premium-joggers,,,natural,,2xl,
 template-premium-joggers,,,latte,,2xl,
@@ -1430,7 +1429,7 @@ template-premium-trucker,,,khaki-birch,,,YP237PKBI
 template-premium-trucker,,,navy-silver,,,YP237NYSI
 template-premium-trucker,,,navy-greyish-brown,,,YP237NGBR
 template-premium-trucker,,,khaki-white,,,YP237KHWH
-template-premium-trucker,,,heather-black-1,,,YP237HGBK
+template-premium-trucker,,,heather-black,,,YP237HGBK
 template-premium-trucker,,,heather-white,,,YP237HEWH
 template-premium-trucker,,,evergreen-white,,,YP237EVWH
 template-premium-trucker,,,dark-grey-white,,,YP237DGWH
@@ -1562,7 +1561,3 @@ template-contrast-pullover-hoodie,,,2xl,,black-hot-pink,JH003JBHP2XL
 template-contrast-pullover-hoodie,,,2xl,,black-green,JH003JBKG2XL
 template-contrast-pullover-hoodie,,,2xl,,black-gold,JH003JBGO2XL
 template-contrast-pullover-hoodie,,,2xl,,black-charcoal,JH003CHJB2XL
-,,,,,,
-,,,,,,
-,,,,,,
-,,,,,,

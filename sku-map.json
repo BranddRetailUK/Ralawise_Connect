@@ -236,6 +236,214 @@
     "shopify_variant_id": 51045549343047
   },
   {
+    "ralawise_sku": "MUG01",
+    "shopify_variant_id": 51866504757575
+  },
+  {
+    "ralawise_sku": "MUG01",
+    "shopify_variant_id": 51866504790343
+  },
+  {
+    "ralawise_sku": "JH003JBSAXS",
+    "shopify_variant_id": 51866480345415
+  },
+  {
+    "ralawise_sku": "JH003CHJBXS",
+    "shopify_variant_id": 51866480378183
+  },
+  {
+    "ralawise_sku": "JH003JBGOXS",
+    "shopify_variant_id": 51866480410951
+  },
+  {
+    "ralawise_sku": "JH003JBSAS",
+    "shopify_variant_id": 51866480574791
+  },
+  {
+    "ralawise_sku": "JH003JBAWS",
+    "shopify_variant_id": 51866480607559
+  },
+  {
+    "ralawise_sku": "JH003CHJBS",
+    "shopify_variant_id": 51866480640327
+  },
+  {
+    "ralawise_sku": "JH003JBGOS",
+    "shopify_variant_id": 51866480673095
+  },
+  {
+    "ralawise_sku": "JH003JBSAM",
+    "shopify_variant_id": 51866480836935
+  },
+  {
+    "ralawise_sku": "JH003JBAWM",
+    "shopify_variant_id": 51866480869703
+  },
+  {
+    "ralawise_sku": "JH003CHJBM",
+    "shopify_variant_id": 51866480902471
+  },
+  {
+    "ralawise_sku": "JH003JBGOM",
+    "shopify_variant_id": 51866480935239
+  },
+  {
+    "ralawise_sku": "JH003JBSAL",
+    "shopify_variant_id": 51866481099079
+  },
+  {
+    "ralawise_sku": "JH003JBAWL",
+    "shopify_variant_id": 51866481131847
+  },
+  {
+    "ralawise_sku": "JH003CHJBL",
+    "shopify_variant_id": 51866481164615
+  },
+  {
+    "ralawise_sku": "JH003JBGOL",
+    "shopify_variant_id": 51866481197383
+  },
+  {
+    "ralawise_sku": "JH003JBSAXL",
+    "shopify_variant_id": 51866481361223
+  },
+  {
+    "ralawise_sku": "JH003JBAWXL",
+    "shopify_variant_id": 51866481393991
+  },
+  {
+    "ralawise_sku": "JH003CHJBXL",
+    "shopify_variant_id": 51866481426759
+  },
+  {
+    "ralawise_sku": "JH003JBGOXL",
+    "shopify_variant_id": 51866481459527
+  },
+  {
+    "ralawise_sku": "JH003JBSA2XL",
+    "shopify_variant_id": 51866481623367
+  },
+  {
+    "ralawise_sku": "JH003JBAW2XL",
+    "shopify_variant_id": 51866481656135
+  },
+  {
+    "ralawise_sku": "JH003CHJB2XL",
+    "shopify_variant_id": 51866481688903
+  },
+  {
+    "ralawise_sku": "JH003JBGO2XL",
+    "shopify_variant_id": 51866481721671
+  },
+  {
+    "ralawise_sku": "AM010NVMAXL",
+    "shopify_variant_id": 51866487849287
+  },
+  {
+    "ralawise_sku": "AM010BKMAXS",
+    "shopify_variant_id": 51866487882055
+  },
+  {
+    "ralawise_sku": "AM010WHITXS",
+    "shopify_variant_id": 51866487914823
+  },
+  {
+    "ralawise_sku": "AM010NVMA4XL",
+    "shopify_variant_id": 51866487980359
+  },
+  {
+    "ralawise_sku": "AM010BKMAS",
+    "shopify_variant_id": 51866488209735
+  },
+  {
+    "ralawise_sku": "AM010WHITS",
+    "shopify_variant_id": 51866488242503
+  },
+  {
+    "ralawise_sku": "AM010BKMAM",
+    "shopify_variant_id": 51866488537415
+  },
+  {
+    "ralawise_sku": "AM010WHITM",
+    "shopify_variant_id": 51866488570183
+  },
+  {
+    "ralawise_sku": "AM010LBLUM",
+    "shopify_variant_id": 51866488734023
+  },
+  {
+    "ralawise_sku": "AM010BKMAL",
+    "shopify_variant_id": 51866488865095
+  },
+  {
+    "ralawise_sku": "AM010WHITL",
+    "shopify_variant_id": 51866488897863
+  },
+  {
+    "ralawise_sku": "AM010LBLUL",
+    "shopify_variant_id": 51866489061703
+  },
+  {
+    "ralawise_sku": "AM010PINK2XL",
+    "shopify_variant_id": 51866489160007
+  },
+  {
+    "ralawise_sku": "AM010BKMAXL",
+    "shopify_variant_id": 51866489192775
+  },
+  {
+    "ralawise_sku": "AM010WHITXL",
+    "shopify_variant_id": 51866489225543
+  },
+  {
+    "ralawise_sku": "AM010PINKS",
+    "shopify_variant_id": 51866489356615
+  },
+  {
+    "ralawise_sku": "AM010PINKM",
+    "shopify_variant_id": 51866489389383
+  },
+  {
+    "ralawise_sku": "AM010PINKL",
+    "shopify_variant_id": 51866489422151
+  },
+  {
+    "ralawise_sku": "AM010PINKXL",
+    "shopify_variant_id": 51866489454919
+  },
+  {
+    "ralawise_sku": "SX773BLAC2XS",
+    "shopify_variant_id": 51866506625351
+  },
+  {
+    "ralawise_sku": "SX773HGRE2XS",
+    "shopify_variant_id": 51866506854727
+  },
+  {
+    "ralawise_sku": "SX773FNAV2XS",
+    "shopify_variant_id": 51866507084103
+  },
+  {
+    "ralawise_sku": "SX773CHGY2XS",
+    "shopify_variant_id": 51866507313479
+  },
+  {
+    "ralawise_sku": "SX773KHAK2XS",
+    "shopify_variant_id": 51866507542855
+  },
+  {
+    "ralawise_sku": "SX773LATT2XS",
+    "shopify_variant_id": 51866507772231
+  },
+  {
+    "ralawise_sku": "SX773NRAW2XS",
+    "shopify_variant_id": 51866508001607
+  },
+  {
+    "ralawise_sku": "SX773SGAZ2XS",
+    "shopify_variant_id": 51866508230983
+  },
+  {
     "ralawise_sku": "JH120DPBKXS",
     "shopify_variant_id": 51767138287943
   },
@@ -3908,7 +4116,7 @@
     "shopify_variant_id": 51657685631303
   },
   {
-    "ralawise_sku": "TR604BLACXL",
+    "ralawise_sku": "TR604BLAC3XL",
     "shopify_variant_id": 51657685664071
   },
   {
@@ -4128,7 +4336,7 @@
     "shopify_variant_id": 51340070486343
   },
   {
-    "ralawise_sku": "JH120DPBKXL",
+    "ralawise_sku": "JH120DPBK3XL",
     "shopify_variant_id": 51340070519111
   },
   {
@@ -4148,7 +4356,7 @@
     "shopify_variant_id": 51340069798215
   },
   {
-    "ralawise_sku": "JH120AWHIXL",
+    "ralawise_sku": "JH120AWHI3XL",
     "shopify_variant_id": 51340069830983
   },
   {
@@ -4168,7 +4376,7 @@
     "shopify_variant_id": 51340071862599
   },
   {
-    "ralawise_sku": "JH120NFNAXL",
+    "ralawise_sku": "JH120NFNA3XL",
     "shopify_variant_id": 51340071895367
   },
   {
@@ -4188,7 +4396,7 @@
     "shopify_variant_id": 51340070027591
   },
   {
-    "ralawise_sku": "JH120NSTOXL",
+    "ralawise_sku": "JH120NSTO3XL",
     "shopify_variant_id": 51340070060359
   },
   {
@@ -4208,7 +4416,7 @@
     "shopify_variant_id": 51340070256967
   },
   {
-    "ralawise_sku": "JH120EAGNXL",
+    "ralawise_sku": "JH120EAGN3XL",
     "shopify_variant_id": 51340070289735
   },
   {
@@ -4228,7 +4436,7 @@
     "shopify_variant_id": 51340070715719
   },
   {
-    "ralawise_sku": "JH120SORDXL",
+    "ralawise_sku": "JH120SORD3XL",
     "shopify_variant_id": 51340070748487
   },
   {
@@ -4248,7 +4456,7 @@
     "shopify_variant_id": 51340070945095
   },
   {
-    "ralawise_sku": "JH120DSANXL",
+    "ralawise_sku": "JH120DSAN3XL",
     "shopify_variant_id": 51340070977863
   },
   {
@@ -4268,7 +4476,7 @@
     "shopify_variant_id": 51340071174471
   },
   {
-    "ralawise_sku": "JH120BROYXL",
+    "ralawise_sku": "JH120BROY3XL",
     "shopify_variant_id": 51340071207239
   },
   {
@@ -4288,7 +4496,7 @@
     "shopify_variant_id": 51340071403847
   },
   {
-    "ralawise_sku": "JH120SOCHXL",
+    "ralawise_sku": "JH120SOCH3XL",
     "shopify_variant_id": 51340071436615
   },
   {
@@ -4308,7 +4516,7 @@
     "shopify_variant_id": 51340071633223
   },
   {
-    "ralawise_sku": "JH120ABLUXL",
+    "ralawise_sku": "JH120ABLU3XL",
     "shopify_variant_id": 51340071665991
   },
   {
@@ -4328,7 +4536,7 @@
     "shopify_variant_id": 51340069568839
   },
   {
-    "ralawise_sku": "JH120BAPKXL",
+    "ralawise_sku": "JH120BAPK3XL",
     "shopify_variant_id": 51340069601607
   },
   {
@@ -4348,7 +4556,7 @@
     "shopify_variant_id": 51572884799815
   },
   {
-    "ralawise_sku": "AM011BLACXL",
+    "ralawise_sku": "AM011BLAC5XL",
     "shopify_variant_id": 51572882374983
   },
   {
@@ -4368,8 +4576,16 @@
     "shopify_variant_id": 51826079203655
   },
   {
+    "ralawise_sku": "AM010DSANXS",
+    "shopify_variant_id": 51826079105351
+  },
+  {
     "ralawise_sku": "AM010NVMA4XL",
     "shopify_variant_id": 51826083660103
+  },
+  {
+    "ralawise_sku": "AM010KHAKXS",
+    "shopify_variant_id": 51826079170887
   },
   {
     "ralawise_sku": "AM010BKMAS",
@@ -4380,12 +4596,40 @@
     "shopify_variant_id": 51826079367495
   },
   {
+    "ralawise_sku": "AM010DSANS",
+    "shopify_variant_id": 51826079269191
+  },
+  {
+    "ralawise_sku": "AM010KHAKS",
+    "shopify_variant_id": 51826079334727
+  },
+  {
+    "ralawise_sku": "AM010GMARS",
+    "shopify_variant_id": 51826083955015
+  },
+  {
+    "ralawise_sku": "AM010HOPKS",
+    "shopify_variant_id": 51826083987783
+  },
+  {
     "ralawise_sku": "AM010BKMAM",
     "shopify_variant_id": 51826079400263
   },
   {
     "ralawise_sku": "AM010WHITM",
     "shopify_variant_id": 51826079531335
+  },
+  {
+    "ralawise_sku": "AM010DSANM",
+    "shopify_variant_id": 51826079433031
+  },
+  {
+    "ralawise_sku": "AM010NVMAM",
+    "shopify_variant_id": 51826084053319
+  },
+  {
+    "ralawise_sku": "AM010KHAKM",
+    "shopify_variant_id": 51826079498567
   },
   {
     "ralawise_sku": "AM010LBLUM",
@@ -4400,6 +4644,14 @@
     "shopify_variant_id": 51826079695175
   },
   {
+    "ralawise_sku": "AM010DSANL",
+    "shopify_variant_id": 51826079596871
+  },
+  {
+    "ralawise_sku": "AM010KHAKL",
+    "shopify_variant_id": 51826079662407
+  },
+  {
     "ralawise_sku": "AM010LBLUL",
     "shopify_variant_id": 51826084315463
   },
@@ -4408,27 +4660,39 @@
     "shopify_variant_id": 51826084413767
   },
   {
-    "ralawise_sku": "AM010BKMAXL",
+    "ralawise_sku": "AM010BKMA6XL",
     "shopify_variant_id": 51826079727943
   },
   {
-    "ralawise_sku": "AM010WHITXL",
+    "ralawise_sku": "AM010WHIT6XL",
     "shopify_variant_id": 51826079859015
+  },
+  {
+    "ralawise_sku": "AM010DSANXL",
+    "shopify_variant_id": 51826079760711
+  },
+  {
+    "ralawise_sku": "AM010NVMA6XL",
+    "shopify_variant_id": 51826084446535
+  },
+  {
+    "ralawise_sku": "AM010KHAKXL",
+    "shopify_variant_id": 51826079826247
   },
   {
     "ralawise_sku": "AM010PINKS",
     "shopify_variant_id": 51826084479303
   },
   {
-    "ralawise_sku": "AM010PINKM",
+    "ralawise_sku": "AM010LBLU6XL",
     "shopify_variant_id": 51826084512071
   },
   {
-    "ralawise_sku": "AM010PINKL",
+    "ralawise_sku": "AM010GMAR6XL",
     "shopify_variant_id": 51826084544839
   },
   {
-    "ralawise_sku": "AM010PINKXL",
+    "ralawise_sku": "AM010HOPK6XL",
     "shopify_variant_id": 51826084577607
   },
   {
@@ -4444,7 +4708,7 @@
     "shopify_variant_id": 51773454614855
   },
   {
-    "ralawise_sku": "BY189UNBEXL",
+    "ralawise_sku": "BY189UNBE4XL",
     "shopify_variant_id": 51773454647623
   },
   {
@@ -4464,7 +4728,7 @@
     "shopify_variant_id": 51773448847687
   },
   {
-    "ralawise_sku": "BY189BLACXL",
+    "ralawise_sku": "BY189BLAC5XL",
     "shopify_variant_id": 51773448880455
   },
   {
@@ -4484,7 +4748,7 @@
     "shopify_variant_id": 51773449142599
   },
   {
-    "ralawise_sku": "BY189VBLUXL",
+    "ralawise_sku": "BY189VBLU5XL",
     "shopify_variant_id": 51773449175367
   },
   {
@@ -4504,7 +4768,7 @@
     "shopify_variant_id": 51773449437511
   },
   {
-    "ralawise_sku": "BY189SOLIXL",
+    "ralawise_sku": "BY189SOLI5XL",
     "shopify_variant_id": 51773449470279
   },
   {
@@ -4524,7 +4788,7 @@
     "shopify_variant_id": 51773448552775
   },
   {
-    "ralawise_sku": "BY189DKHAXL",
+    "ralawise_sku": "BY189DKHA5XL",
     "shopify_variant_id": 51773448585543
   },
   {
@@ -4544,7 +4808,7 @@
     "shopify_variant_id": 51340076581191
   },
   {
-    "ralawise_sku": "JH001DPBKXL",
+    "ralawise_sku": "JH001DPBK5XL",
     "shopify_variant_id": 51340076613959
   },
   {
@@ -4564,7 +4828,7 @@
     "shopify_variant_id": 51340076876103
   },
   {
-    "ralawise_sku": "JH001AWHIXL",
+    "ralawise_sku": "JH001AWHI5XL",
     "shopify_variant_id": 51340076908871
   },
   {
@@ -4584,7 +4848,7 @@
     "shopify_variant_id": 51340077465927
   },
   {
-    "ralawise_sku": "JH001NFNAXL",
+    "ralawise_sku": "JH001NFNA5XL",
     "shopify_variant_id": 51340077498695
   },
   {
@@ -4604,7 +4868,7 @@
     "shopify_variant_id": 51340078055751
   },
   {
-    "ralawise_sku": "JH001PURPXL",
+    "ralawise_sku": "JH001PURP5XL",
     "shopify_variant_id": 51340078088519
   },
   {
@@ -4624,7 +4888,7 @@
     "shopify_variant_id": 51340078350663
   },
   {
-    "ralawise_sku": "JH001ATBLXL",
+    "ralawise_sku": "JH001AWHI5XL",
     "shopify_variant_id": 51340078383431
   },
   {
@@ -4644,7 +4908,7 @@
     "shopify_variant_id": 51340078645575
   },
   {
-    "ralawise_sku": "JH001SKYYXL",
+    "ralawise_sku": "JH001SKYY5XL",
     "shopify_variant_id": 51340078678343
   },
   {
@@ -4664,7 +4928,7 @@
     "shopify_variant_id": 51340078940487
   },
   {
-    "ralawise_sku": "JH001HOPKXL",
+    "ralawise_sku": "JH001HOPK3XL",
     "shopify_variant_id": 51340078973255
   },
   {
@@ -4672,24 +4936,120 @@
     "shopify_variant_id": 51660758778183
   },
   {
+    "ralawise_sku": "SX773BLACS",
+    "shopify_variant_id": 51660758810951
+  },
+  {
+    "ralawise_sku": "SX773BLACM",
+    "shopify_variant_id": 51660758843719
+  },
+  {
+    "ralawise_sku": "SX773BLACL",
+    "shopify_variant_id": 51660758876487
+  },
+  {
+    "ralawise_sku": "SX773BLACXL",
+    "shopify_variant_id": 51660758909255
+  },
+  {
     "ralawise_sku": "SX773HGRE2XS",
     "shopify_variant_id": 51660759007559
+  },
+  {
+    "ralawise_sku": "SX773HGRES",
+    "shopify_variant_id": 51660759040327
+  },
+  {
+    "ralawise_sku": "SX773HGREM",
+    "shopify_variant_id": 51660759073095
+  },
+  {
+    "ralawise_sku": "SX773HGREL",
+    "shopify_variant_id": 51660759105863
+  },
+  {
+    "ralawise_sku": "SX773HGREXL",
+    "shopify_variant_id": 51660759138631
   },
   {
     "ralawise_sku": "SX773FNAV2XS",
     "shopify_variant_id": 51660759236935
   },
   {
+    "ralawise_sku": "SX773FNAVS",
+    "shopify_variant_id": 51660759269703
+  },
+  {
+    "ralawise_sku": "SX773FNAVM",
+    "shopify_variant_id": 51660759302471
+  },
+  {
+    "ralawise_sku": "SX773FNAVL",
+    "shopify_variant_id": 51660759335239
+  },
+  {
+    "ralawise_sku": "SX773FNAVXL",
+    "shopify_variant_id": 51660759368007
+  },
+  {
     "ralawise_sku": "SX773CHGY2XS",
     "shopify_variant_id": 51678441242951
+  },
+  {
+    "ralawise_sku": "SX773CHGYS",
+    "shopify_variant_id": 51678441275719
+  },
+  {
+    "ralawise_sku": "SX773CHGYM",
+    "shopify_variant_id": 51678441308487
+  },
+  {
+    "ralawise_sku": "SX773CHGYL",
+    "shopify_variant_id": 51678441341255
+  },
+  {
+    "ralawise_sku": "SX773CHGYXL",
+    "shopify_variant_id": 51678441374023
   },
   {
     "ralawise_sku": "SX773KHAK2XS",
     "shopify_variant_id": 51678441472327
   },
   {
+    "ralawise_sku": "SX773KHAKS",
+    "shopify_variant_id": 51678441505095
+  },
+  {
+    "ralawise_sku": "SX773KHAKM",
+    "shopify_variant_id": 51678441537863
+  },
+  {
+    "ralawise_sku": "SX773KHAKL",
+    "shopify_variant_id": 51678441570631
+  },
+  {
+    "ralawise_sku": "SX773KHAKXL",
+    "shopify_variant_id": 51678441603399
+  },
+  {
     "ralawise_sku": "SX773LATT2XS",
     "shopify_variant_id": 51678441701703
+  },
+  {
+    "ralawise_sku": "SX773LATTS",
+    "shopify_variant_id": 51678441734471
+  },
+  {
+    "ralawise_sku": "SX773LATTM",
+    "shopify_variant_id": 51678441767239
+  },
+  {
+    "ralawise_sku": "SX773LATTL",
+    "shopify_variant_id": 51678441800007
+  },
+  {
+    "ralawise_sku": "SX773LATTXL",
+    "shopify_variant_id": 51678441832775
   },
   {
     "ralawise_sku": "SX773NRAW2XS",
@@ -4712,7 +5072,7 @@
     "shopify_variant_id": 51340063441223
   },
   {
-    "ralawise_sku": "BB010BLACXL",
+    "ralawise_sku": "BB010BLAC5XL",
     "shopify_variant_id": 51340063473991
   },
   {
@@ -4728,7 +5088,7 @@
     "shopify_variant_id": 51340063736135
   },
   {
-    "ralawise_sku": "BB010WHITXL",
+    "ralawise_sku": "BB010WHIT5XL",
     "shopify_variant_id": 51340063768903
   },
   {
@@ -4744,7 +5104,7 @@
     "shopify_variant_id": 51340064031047
   },
   {
-    "ralawise_sku": "BB010NAVYXL",
+    "ralawise_sku": "BB010NAVY5XL",
     "shopify_variant_id": 51340064063815
   },
   {
@@ -4760,7 +5120,7 @@
     "shopify_variant_id": 51340064325959
   },
   {
-    "ralawise_sku": "BB010CHARXL",
+    "ralawise_sku": "BB010CHAR5XL",
     "shopify_variant_id": 51340064358727
   },
   {
@@ -4776,7 +5136,7 @@
     "shopify_variant_id": 51340065210695
   },
   {
-    "ralawise_sku": "AM010PINKXL",
+    "ralawise_sku": "AM010PINK2XL",
     "shopify_variant_id": 51340065243463
   },
   {
@@ -4792,12 +5152,8 @@
     "shopify_variant_id": 51340065505607
   },
   {
-    "ralawise_sku": "AM010HOPKXL",
+    "ralawise_sku": "AM010HOPK2XL",
     "shopify_variant_id": 51340065538375
-  },
-  {
-    "ralawise_sku": "BB010BLACXS",
-    "shopify_variant_id": 51847437779271
   },
   {
     "ralawise_sku": "GD078BLACS",
@@ -4848,19 +5204,19 @@
     "shopify_variant_id": 51847418609991
   },
   {
-    "ralawise_sku": "GD078BLACXL",
+    "ralawise_sku": "GD078BLAC2XL",
     "shopify_variant_id": 51847418642759
   },
   {
-    "ralawise_sku": "GD078NAVYXL",
+    "ralawise_sku": "GD078NAVY2XL",
     "shopify_variant_id": 51847418675527
   },
   {
-    "ralawise_sku": "GD078SPGYXL",
+    "ralawise_sku": "GD078SPGY2XL",
     "shopify_variant_id": 51847418708295
   },
   {
-    "ralawise_sku": "GD078WHITXL",
+    "ralawise_sku": "GD078WHIT2XL",
     "shopify_variant_id": 51847418741063
   },
   {
@@ -5140,7 +5496,7 @@
     "shopify_variant_id": 51549191799111
   },
   {
-    "ralawise_sku": "JH001DPBKXL",
+    "ralawise_sku": "JH001DPBK5XL",
     "shopify_variant_id": 51549191831879
   },
   {
@@ -5156,7 +5512,7 @@
     "shopify_variant_id": 51549192094023
   },
   {
-    "ralawise_sku": "JH001AWHIXL",
+    "ralawise_sku": "JH001AWHI5XL",
     "shopify_variant_id": 51549192126791
   },
   {
@@ -5176,7 +5532,7 @@
     "shopify_variant_id": 51549192683847
   },
   {
-    "ralawise_sku": "JH001NFNAXL",
+    "ralawise_sku": "JH001NFNA5XL",
     "shopify_variant_id": 51549192716615
   },
   {
@@ -5196,7 +5552,7 @@
     "shopify_variant_id": 51549192978759
   },
   {
-    "ralawise_sku": "JH001KHAKXL",
+    "ralawise_sku": "JH001KHAK3XL",
     "shopify_variant_id": 51549193011527
   },
   {
@@ -5216,7 +5572,7 @@
     "shopify_variant_id": 51549193273671
   },
   {
-    "ralawise_sku": "JH001PURPXL",
+    "ralawise_sku": "JH001PURP5XL",
     "shopify_variant_id": 51549193306439
   },
   {
@@ -5236,7 +5592,7 @@
     "shopify_variant_id": 51549193568583
   },
   {
-    "ralawise_sku": "JH001BAPKXL",
+    "ralawise_sku": "AM011BLAC4XL",
     "shopify_variant_id": 51549193601351
   },
   {
@@ -5256,7 +5612,7 @@
     "shopify_variant_id": 51549193863495
   },
   {
-    "ralawise_sku": "JH001SKYYXL",
+    "ralawise_sku": "JH001SKYY5XL",
     "shopify_variant_id": 51549193896263
   },
   {
@@ -5276,7 +5632,7 @@
     "shopify_variant_id": 51549194158407
   },
   {
-    "ralawise_sku": "JH001HOPKXL",
+    "ralawise_sku": "JH001HOPK3XL",
     "shopify_variant_id": 51549194191175
   },
   {
