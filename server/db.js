@@ -54,5 +54,23 @@ export async function getAccessToken(shop) {
   }
 }
 
-// ✅ Needed for collections.js
+// ✅ Alias for compatibility with collections.js and dashboard-stats.js
 export { getAccessToken as getShopToken };
+
+// ✅ Dashboard stat helper
+export async function getSyncErrorCount(shop) {
+  const result = await db.query(
+    `SELECT COUNT(*) FROM sync_logs WHERE shop_domain = $1 AND status = 'error' AND synced_at > NOW() - INTERVAL '1 day'`,
+    [shop]
+  );
+  return parseInt(result.rows[0].count);
+}
+
+// ✅ Logging helper for sync results
+export async function logSyncResult(shop, sku, status, message = null) {
+  await db.query(
+    `INSERT INTO sync_logs (shop_domain, sku, status, message)
+     VALUES ($1, $2, $3, $4)`,
+    [shop, sku, status, message]
+  );
+}

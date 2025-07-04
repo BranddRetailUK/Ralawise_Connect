@@ -157,53 +157,73 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadCollections() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const shop = urlParams.get('shop');
-  if (!shop) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const shop = urlParams.get('shop');
+    if (!shop) return;
 
-  try {
-    const res = await fetch(`/api/collections?shop=${shop}`, {
-      cache: "no-store"
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch(`/api/collections?shop=${shop}`, {
+        cache: "no-store"
+      });
+      const data = await res.json();
 
-    console.log("📦 Collection data:", data);
+      console.log("📦 Collection data:", data);
 
-    const container = document.getElementById('collections-grid');
-    container.innerHTML = '';
+      const container = document.getElementById('collections-grid');
+      container.innerHTML = '';
 
-    if (!data.collections?.length) {
-      container.innerHTML = '<p class="text-gray-500 col-span-full">No collections found.</p>';
-      return;
-    }
+      if (!data.collections?.length) {
+        container.innerHTML = '<p class="text-gray-500 col-span-full">No collections found.</p>';
+        return;
+      }
 
-    data.collections.forEach(col => {
-      const div = document.createElement('div');
-      div.className = 'bg-white shadow rounded p-4';
+      data.collections.forEach(col => {
+        const div = document.createElement('div');
+        div.className = 'bg-white shadow rounded p-4';
 
-      div.innerHTML = `
-        <div class="flex items-center gap-4">
-          <img src="${col.image || 'https://placehold.co/80x80?text=No+Image'}" class="w-16 h-16 object-cover rounded border" alt="Collection image" />
-          <div>
-            <a href="https://${shop}/collections/${col.handle}" target="_blank" class="text-sm font-semibold text-blue-600 hover:underline">
-              ${col.title}
-            </a>
-            <div class="text-xs text-gray-500">${col.product_count} product(s)</div>
+        div.innerHTML = `
+          <div class="flex items-center gap-4">
+            <img src="${col.image || 'https://placehold.co/80x80?text=No+Image'}" class="w-16 h-16 object-cover rounded border" alt="Collection image" />
+            <div>
+              <a href="https://${shop}/collections/${col.handle}" target="_blank" class="text-sm font-semibold text-blue-600 hover:underline">
+                ${col.title}
+              </a>
+              <div class="text-xs text-gray-500">${col.product_count} product(s)</div>
+            </div>
           </div>
-        </div>
-      `;
+        `;
 
-      container.appendChild(div);
-    });
-  } catch (err) {
-    console.error('❌ Failed to load collections:', err);
+        container.appendChild(div);
+      });
+    } catch (err) {
+      console.error('❌ Failed to load collections:', err);
+    }
   }
-}
 
+  async function loadDashboardStats() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shop = urlParams.get('shop');
+    if (!shop) return;
+
+    try {
+      const res = await fetch(`/api/dashboard-stats?shop=${shop}`);
+      const stats = await res.json();
+
+      document.getElementById('stat-products').textContent = stats.products ?? '–';
+      document.getElementById('stat-collections').textContent = stats.collections ?? '–';
+      document.getElementById('stat-errors').textContent = stats.sync_errors ?? '–';
+      document.getElementById('stat-skus').textContent = stats.mapped_skus ?? '–';
+    } catch (err) {
+      console.error('❌ Failed to load dashboard stats:', err);
+    }
+  }
 
   // Default tab
   setTimeout(() => {
     const defaultBtn = document.querySelector('.tab-btn[data-tab="products"]');
     if (defaultBtn) defaultBtn.click();
   }, 0);
+
+  // Load top bar stats
+  loadDashboardStats();
 });

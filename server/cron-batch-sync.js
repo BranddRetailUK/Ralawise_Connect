@@ -1,6 +1,6 @@
 // server/cron-batch-sync.js
 import { runSyncForShop } from './sync-logic.js';
-import db from './db.js';
+import db, { logSyncResult } from './db.js';
 
 (async () => {
   console.log('🌀 Starting batch sync for all installed stores...');
@@ -15,8 +15,12 @@ import db from './db.js';
       try {
         await runSyncForShop(shop_domain, access_token);
         console.log(`✅ Finished sync for ${shop_domain}`);
+
+        await logSyncResult(shop_domain, 'STORE_SYNC', 'success', 'Cron sync completed');
       } catch (err) {
         console.error(`❌ Sync failed for ${shop_domain}:`, err.message || err);
+
+        await logSyncResult(shop_domain, 'STORE_SYNC', 'error', err.message || 'Cron sync error');
       }
     }
 

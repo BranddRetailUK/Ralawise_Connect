@@ -20,28 +20,29 @@
   </header>
 
   <!-- Summary Cards -->
-  <section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-    <div class="bg-white shadow rounded p-4">
-      <p class="text-sm text-gray-500">Products</p>
-      <h2 class="text-2xl font-bold">748</h2>
-      <p class="text-yellow-600 text-sm mt-1">72% Overall</p>
-    </div>
-    <div class="bg-white shadow rounded p-4">
-      <p class="text-sm text-gray-500">Collections</p>
-      <h2 class="text-2xl font-bold">91</h2>
-      <p class="text-yellow-600 text-sm mt-1">59% Overall</p>
-    </div>
-    <div class="bg-white shadow rounded p-4">
-      <p class="text-sm text-gray-500">Sync Errors</p>
-      <h2 class="text-2xl font-bold">3</h2>
-      <p class="text-red-600 text-sm mt-1">Last 24h</p>
-    </div>
-    <div class="bg-white shadow rounded p-4">
-      <p class="text-sm text-gray-500">Mapped SKUs</p>
-      <h2 class="text-2xl font-bold">612</h2>
-      <p class="text-green-600 text-sm mt-1">84% Coverage</p>
-    </div>
-  </section>
+<section class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-sm text-gray-500">Products</p>
+    <h2 id="stat-products" class="text-2xl font-bold">–</h2>
+    <p class="text-yellow-600 text-sm mt-1">Live</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-sm text-gray-500">Collections</p>
+    <h2 id="stat-collections" class="text-2xl font-bold">–</h2>
+    <p class="text-yellow-600 text-sm mt-1">Live</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-sm text-gray-500">Sync Errors</p>
+    <h2 id="stat-errors" class="text-2xl font-bold">–</h2>
+    <p class="text-red-600 text-sm mt-1">Last 24h</p>
+  </div>
+  <div class="bg-white shadow rounded p-4">
+    <p class="text-sm text-gray-500">Mapped SKUs</p>
+    <h2 id="stat-skus" class="text-2xl font-bold">–</h2>
+    <p class="text-green-600 text-sm mt-1">Live</p>
+  </div>
+</section>
+
 
   <!-- Action Boxes -->
   <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">

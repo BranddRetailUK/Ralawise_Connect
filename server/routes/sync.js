@@ -3,7 +3,7 @@ import express from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import { runSyncForShop } from '../sync-logic.js';
-import { getAccessToken } from '../db.js';
+import { getAccessToken, logSyncResult } from '../db.js';
 
 const router = express.Router();
 
@@ -17,10 +17,19 @@ router.get('/sync', async (req, res) => {
     if (!token) return res.status(403).json({ error: 'Shop not authorized' });
 
     console.log(`🔁 Manual sync started for: ${shop}`);
+
     await runSyncForShop(shop, token);
+
+    // Log success at store level (optional)
+    await logSyncResult(shop, 'STORE_SYNC', 'success', 'Manual sync completed');
+
     res.json({ status: 'success', message: `Sync complete for ${shop}` });
   } catch (err) {
     console.error(`❌ Sync error for ${shop}:`, err.message || err);
+
+    // Log failure at store level
+    await logSyncResult(shop, 'STORE_SYNC', 'error', err.message || 'Unknown sync failure');
+
     res.status(500).json({ error: 'Sync failed', details: err.message || err });
   }
 });
