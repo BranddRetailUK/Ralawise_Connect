@@ -34,61 +34,60 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Sync Button Logic
   document.querySelector('.sync-trigger')?.addEventListener('click', async () => {
-  const shop = new URLSearchParams(window.location.search).get('shop');
-  if (!shop) return;
+    const shop = new URLSearchParams(window.location.search).get('shop');
+    if (!shop) return;
 
-  const button = document.querySelector('.sync-trigger');
-  const span = button.querySelector('span');
-  let progressBar = button.querySelector('.progress-bar');
+    const button = document.querySelector('.sync-trigger');
+    const span = button.querySelector('span');
+    let progressBar = button.querySelector('.progress-bar');
 
-  // Remove old progress bar if it exists
-  if (progressBar) progressBar.remove();
+    // Remove any old bar
+    if (progressBar) progressBar.remove();
 
-  // Create and insert new progress bar
-  progressBar = document.createElement('div');
-  progressBar.classList.add('progress-bar');
-  button.prepend(progressBar);
+    // Create and insert bar
+    progressBar = document.createElement('div');
+    progressBar.classList.add('progress-bar');
+    button.prepend(progressBar);
 
-  // Clean up styling before animation
-  button.classList.remove('bg-black', 'text-white', 'bg-green-600');
-  button.classList.add('syncing');
-  span.textContent = 'Syncing...';
+    // Reset classes
+    button.classList.remove('bg-black', 'text-white', 'bg-green-600');
+    button.classList.add('syncing');
+    span.textContent = 'Syncing...';
 
-  try {
-    const res = await fetch('/api/generate-sku-map', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ shop }),
-    });
+    try {
+      const res = await fetch('/api/generate-sku-map', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ shop }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      await fetch(`/api/sync?shop=${shop}`);
-      span.textContent = 'Synced ✅';
+      if (res.ok) {
+        await fetch(`/api/sync?shop=${shop}`);
+        span.textContent = 'Synced ✅';
 
-      // ⏱ Reset after 3 seconds
-      setTimeout(() => {
-        button.classList.remove('syncing', 'bg-green-600');
+        // Reset after 3 seconds
+        setTimeout(() => {
+          button.classList.remove('syncing', 'bg-green-600');
+          button.classList.add('bg-black', 'text-white');
+          span.textContent = 'Start Sync';
+        }, 3000);
+      } else {
+        console.error(data);
+        button.classList.remove('syncing');
         button.classList.add('bg-black', 'text-white');
         span.textContent = 'Start Sync';
-      }, 3000);
-    } else {
-      console.error(data);
+      }
+    } catch (err) {
+      console.error('❌ Sync error:', err);
       button.classList.remove('syncing');
       button.classList.add('bg-black', 'text-white');
       span.textContent = 'Start Sync';
-      alert('❌ Failed to generate SKU map: ' + data.error);
     }
-  } catch (err) {
-    console.error('❌ Sync error:', err);
-    button.classList.remove('syncing');
-    button.classList.add('bg-black', 'text-white');
-    span.textContent = 'Start Sync';
-    alert('❌ Failed to start sync');
-  }
-});
+  });
 
   let logPoller = null;
 
@@ -197,8 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await res.json();
 
-      console.log("📦 Collection data:", data);
-
       const container = document.getElementById('collections-grid');
       container.innerHTML = '';
 
@@ -248,12 +245,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Default tab
+  // Default tab load
   setTimeout(() => {
     const defaultBtn = document.querySelector('.tab-btn[data-tab="products"]');
     if (defaultBtn) defaultBtn.click();
   }, 0);
 
-  // Load top bar stats
   loadDashboardStats();
 });
