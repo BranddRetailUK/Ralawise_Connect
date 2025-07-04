@@ -45,19 +45,31 @@
 
 
   <!-- Action Boxes -->
-  <section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    <div class="bg-white shadow rounded p-6">
-      <h3 class="text-lg font-semibold mb-2">Get started</h3>
-      <p class="text-sm text-gray-600 mb-4">Sync your Shopify products with Ralawise stock in one click.</p>
-      <button class="sync-trigger bg-black text-white px-4 py-2 rounded">Start Sync</button>
+<section class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+  <div class="bg-white shadow rounded p-6">
+    <h3 class="text-lg font-semibold mb-2">Get started</h3>
+    <p class="text-sm text-gray-600 mb-4">
+      Sync your Shopify products with Ralawise stock in one click.
+    </p>
+    <button class="sync-trigger bg-black text-white px-4 py-2 rounded relative flex items-center gap-2">
+      Start Sync
+      <span id="sync-badge" class="hidden text-xs bg-white text-black px-2 py-0.5 rounded animate-pulse">
+        Syncing...
+      </span>
+    </button>
+  </div>
 
-    </div>
-    <div class="bg-white shadow rounded p-6">
-      <h3 class="text-lg font-semibold mb-2">Need help?</h3>
-      <p class="text-sm text-gray-600 mb-4">Schedule a free onboarding call and we’ll walk you through setup.</p>
-      <button class="border border-black text-black px-4 py-2 rounded hover:bg-black hover:text-white">Book a Call</button>
-    </div>
-  </section>
+  <div class="bg-white shadow rounded p-6">
+    <h3 class="text-lg font-semibold mb-2">Need help?</h3>
+    <p class="text-sm text-gray-600 mb-4">
+      Schedule a free onboarding call and we’ll walk you through setup.
+    </p>
+    <button class="border border-black text-black px-4 py-2 rounded hover:bg-black hover:text-white">
+      Book a Call
+    </button>
+  </div>
+</section>
+
 
   <!-- Navigation Tabs -->
   <nav class="flex gap-4 mb-6">

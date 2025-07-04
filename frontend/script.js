@@ -34,31 +34,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelector('.sync-trigger')?.addEventListener('click', async () => {
-    const shop = new URLSearchParams(window.location.search).get('shop');
-    if (!shop) return alert('Missing shop in URL');
+  document.querySelector('.sync-trigger')?.addEventListener('click', async (e) => {
+  const btn = e.target.closest('.sync-trigger');
+  const badge = document.getElementById('sync-badge');
+  const shop = new URLSearchParams(window.location.search).get('shop');
+  if (!shop) return alert('Missing shop in URL');
 
-    try {
-      const res = await fetch('/api/generate-sku-map', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shop }),
-      });
+  // 🔄 Show syncing state
+  btn.disabled = true;
+  btn.classList.add('opacity-50', 'cursor-wait');
+  badge.classList.remove('hidden');
 
-      const data = await res.json();
+  try {
+    const res = await fetch('/api/generate-sku-map', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ shop }),
+    });
 
-      if (res.ok) {
-        alert(`✅ ${data.inserted} SKUs mapped. Starting sync...`);
-        await fetch(`/api/sync?shop=${shop}`);
-      } else {
-        console.error(data);
-        alert('❌ Failed to generate SKU map: ' + data.error);
-      }
-    } catch (err) {
-      console.error('❌ Sync error:', err);
-      alert('❌ Failed to start sync');
+    const data = await res.json();
+
+    if (res.ok) {
+      alert(`✅ ${data.inserted} SKUs mapped. Starting sync...`);
+      await fetch(`/api/sync?shop=${shop}`);
+      alert(`✅ Sync complete.`);
+    } else {
+      console.error(data);
+      alert('❌ Failed to generate SKU map: ' + data.error);
     }
-  });
+  } catch (err) {
+    console.error('❌ Sync error:', err);
+    alert('❌ Failed to start sync');
+  } finally {
+    btn.disabled = false;
+    btn.classList.remove('opacity-50', 'cursor-wait');
+    badge.classList.add('hidden');
+  }
+});
+
+
 
   let logPoller = null;
 
