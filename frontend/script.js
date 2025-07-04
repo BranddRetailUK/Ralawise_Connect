@@ -42,14 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const span = button.querySelector('span');
   let progressBar = button.querySelector('.progress-bar');
 
-  // Reset any previous progress animation
+  // Remove old progress bar if it exists
   if (progressBar) progressBar.remove();
 
+  // Create and insert new progress bar
   progressBar = document.createElement('div');
   progressBar.classList.add('progress-bar');
   button.prepend(progressBar);
 
-  // Start syncing state
+  // Clean up styling before animation
+  button.classList.remove('bg-black', 'text-white', 'bg-green-600');
   button.classList.add('syncing');
   span.textContent = 'Syncing...';
 
@@ -68,25 +70,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // ⏱ Reset after 3 seconds
       setTimeout(() => {
-        button.classList.remove('syncing');
+        button.classList.remove('syncing', 'bg-green-600');
+        button.classList.add('bg-black', 'text-white');
         span.textContent = 'Start Sync';
       }, 3000);
     } else {
       console.error(data);
       button.classList.remove('syncing');
+      button.classList.add('bg-black', 'text-white');
       span.textContent = 'Start Sync';
       alert('❌ Failed to generate SKU map: ' + data.error);
     }
   } catch (err) {
     console.error('❌ Sync error:', err);
     button.classList.remove('syncing');
+    button.classList.add('bg-black', 'text-white');
     span.textContent = 'Start Sync';
     alert('❌ Failed to start sync');
   }
 });
-
-
-
 
   let logPoller = null;
 
