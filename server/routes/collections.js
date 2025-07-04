@@ -25,37 +25,14 @@ router.get('/', async (req, res) => {
 
     const collections = [...custom.data.custom_collections, ...smart.data.smart_collections];
 
-    const collectionsWithCounts = [];
+    const simplified = collections.map((c) => ({
+      id: c.id,
+      title: c.title,
+      handle: c.handle,
+      image: c.image?.src || null,
+    }));
 
-    for (const c of collections) {
-      try {
-        const countRes = await axios.get(`https://${shop}/admin/api/2024-04/collections/${c.id}/products/count.json`, {
-          headers: { 'X-Shopify-Access-Token': token },
-        });
-
-        collectionsWithCounts.push({
-          id: c.id,
-          title: c.title,
-          handle: c.handle,
-          image: c.image?.src || null,
-          product_count: countRes.data.count,
-        });
-
-        // Add delay to avoid rate limiting
-        await new Promise((r) => setTimeout(r, 300)); // 300ms between calls
-      } catch (countErr) {
-        console.warn(`⚠️ Failed to fetch product count for collection ${c.id}:`, countErr.response?.data || countErr.message);
-        collectionsWithCounts.push({
-          id: c.id,
-          title: c.title,
-          handle: c.handle,
-          image: c.image?.src || null,
-          product_count: 0,
-        });
-      }
-    }
-
-    res.json({ collections: collectionsWithCounts });
+    res.json({ collections: simplified });
 
   } catch (err) {
     console.error('❌ Error fetching collections:', err.response?.data || err.message);
