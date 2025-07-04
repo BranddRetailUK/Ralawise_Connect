@@ -36,16 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelector('.sync-trigger')?.addEventListener('click', async () => {
   const shop = new URLSearchParams(window.location.search).get('shop');
-  if (!shop) return alert('Missing shop in URL');
+  if (!shop) return;
 
   const button = document.querySelector('.sync-trigger');
   const span = button.querySelector('span');
-  const progress = button.querySelector('.progress-bar');
+  let progressBar = button.querySelector('.progress-bar');
 
-  // Reset animation by cloning the progress bar
-  const newProgress = progress.cloneNode(true);
-  progress.parentNode.replaceChild(newProgress, progress);
+  // Reset any previous progress animation
+  if (progressBar) progressBar.remove();
 
+  progressBar = document.createElement('div');
+  progressBar.classList.add('progress-bar');
+  button.prepend(progressBar);
+
+  // Start syncing state
   button.classList.add('syncing');
   span.textContent = 'Syncing...';
 
@@ -60,8 +64,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (res.ok) {
       await fetch(`/api/sync?shop=${shop}`);
-      button.classList.remove('syncing');
       span.textContent = 'Synced ✅';
+
+      // ⏱ Reset after 3 seconds
+      setTimeout(() => {
+        button.classList.remove('syncing');
+        span.textContent = 'Start Sync';
+      }, 3000);
     } else {
       console.error(data);
       button.classList.remove('syncing');
@@ -75,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('❌ Failed to start sync');
   }
 });
-
 
 
 
