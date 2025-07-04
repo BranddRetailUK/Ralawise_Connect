@@ -13,7 +13,7 @@ export async function getLocationId(shop) {
   if (!token) throw new Error(`Missing token for shop: ${shop}`);
 
   try {
-    const res = await axios.get(`https://${shop}/admin/api/2023-10/locations.json`, {
+    const res = await axios.get(`https://${shop}/admin/api/2024-10/locations.json`, {
       headers: {
         'X-Shopify-Access-Token': token,
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ export async function getInventoryItemId(shop, variantId) {
   if (!token) throw new Error(`Missing token for shop: ${shop}`);
 
   try {
-    const res = await axios.get(`https://${shop}/admin/api/2023-10/variants/${variantId}.json`, {
+    const res = await axios.get(`https://${shop}/admin/api/2024-10/variants/${variantId}.json`, {
       headers: {
         'X-Shopify-Access-Token': token,
         'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ export async function updateInventoryLevel(shop, inventoryItemId, locationId, qu
   if (!token) throw new Error(`Missing token for shop: ${shop}`);
 
   try {
-    await axios.post(`https://${shop}/admin/api/2023-10/inventory_levels/set.json`, {
+    await axios.post(`https://${shop}/admin/api/2024-10/inventory_levels/set.json`, {
       inventory_item_id: inventoryItemId,
       location_id: locationId,
       available: quantity
