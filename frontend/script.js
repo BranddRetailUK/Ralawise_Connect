@@ -157,32 +157,43 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadCollections() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const shop = urlParams.get('shop');
-    if (!shop) return;
+  const urlParams = new URLSearchParams(window.location.search);
+  const shop = urlParams.get('shop');
+  if (!shop) return;
 
-    try {
-      const res = await fetch(`/api/collections?shop=${shop}`);
-      const data = await res.json();
+  try {
+    const res = await fetch(`/api/collections?shop=${shop}`, {
+      cache: "no-store"
+    });
+    const data = await res.json();
 
-      const container = document.getElementById('collections-grid');
-      container.innerHTML = '';
+    console.log("📦 Collection data:", data);
 
-      data.collections.forEach(col => {
-        const div = document.createElement('div');
-        div.className = 'bg-white shadow rounded p-4';
+    const container = document.getElementById('collections-grid');
+    container.innerHTML = '';
 
-        div.innerHTML = `
-          <div class="text-sm font-semibold text-gray-900">${col.title}</div>
-          <div class="text-xs text-gray-500">${col.products_count} product(s)</div>
-        `;
-
-        container.appendChild(div);
-      });
-    } catch (err) {
-      console.error('❌ Failed to load collections:', err);
+    if (!data.collections?.length) {
+      container.innerHTML = '<p class="text-gray-500 col-span-full">No collections found.</p>';
+      return;
     }
+
+    data.collections.forEach(col => {
+      const div = document.createElement('div');
+      div.className = 'bg-white shadow rounded p-4';
+
+      div.innerHTML = `
+        <div class="text-sm font-semibold text-gray-900">${col.title}</div>
+        <div class="text-xs text-gray-500">${col.product_count} product(s)</div>
+      `;
+
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error('❌ Failed to load collections:', err);
   }
+}
+
+
 
   // Default tab
   setTimeout(() => {
