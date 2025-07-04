@@ -13,7 +13,8 @@ import productRoutes from './routes/products.js';
 import syncRoutes from './routes/sync.js';
 import webhookRoutes from './routes/webhooks.js';
 import uploadRoutes from './routes/upload.js';
-import collectionsRoute from './routes/collections.js'; // ✅ NEW
+import collectionsRoute from './routes/collections.js';
+import dashboardStatsRoute from './routes/dashboard-stats.js';
 
 dotenv.config();
 const app = express();
@@ -46,7 +47,8 @@ app.use('/api/products', productRoutes);
 app.use('/api', syncRoutes);
 app.use('/api/webhooks', webhookRoutes);
 app.use('/api', uploadRoutes);
-app.use('/api/collections', collectionsRoute); // ✅ NEW: Collections endpoint
+app.use('/api/collections', collectionsRoute); 
+app.use('/api/dashboard-stats', dashboardStatsRoute);
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));
