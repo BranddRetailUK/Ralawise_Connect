@@ -15,13 +15,14 @@ router.get('/', async (req, res) => {
 
   try {
     const [custom, smart] = await Promise.all([
-      axios.get(`https://${shop}/admin/api/2023-10/custom_collections.json`, {
-        headers: { 'X-Shopify-Access-Token': token },
-      }),
-      axios.get(`https://${shop}/admin/api/2023-10/smart_collections.json`, {
-        headers: { 'X-Shopify-Access-Token': token },
-      }),
-    ]);
+  axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count`, {
+    headers: { 'X-Shopify-Access-Token': token },
+  }),
+  axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count`, {
+    headers: { 'X-Shopify-Access-Token': token },
+  }),
+]);
+
 
     const collections = [...custom.data.custom_collections, ...smart.data.smart_collections];
 

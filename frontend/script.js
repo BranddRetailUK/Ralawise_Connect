@@ -165,12 +165,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`/api/collections?shop=${shop}`);
       const data = await res.json();
 
-      const container = document.getElementById('collections-list');
+      const container = document.getElementById('collections-grid');
       container.innerHTML = '';
 
       data.collections.forEach(col => {
         const div = document.createElement('div');
-        div.className = 'border rounded px-4 py-3 bg-white shadow-sm mb-2';
+        div.className = 'bg-white shadow rounded p-4';
 
         div.innerHTML = `
           <div class="text-sm font-semibold text-gray-900">${col.title}</div>
