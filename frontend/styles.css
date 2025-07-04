@@ -10,3 +10,48 @@
 .animate-grow {
   animation: growBar 3s linear forwards;
 }
+
+/* styles.css */
+
+.sync-button {
+  position: relative;
+  background-color: #1a1a1a;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.sync-button.syncing {
+  color: white;
+  background-color: #04AA00; /* vibrant green */
+}
+
+.sync-button .progress-bar {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, #00ff00, #00cc00);
+  animation: progressSlide 2s linear forwards;
+  z-index: 0;
+  border-radius: 0.5rem;
+}
+
+.sync-button span {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes progressSlide {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 0%;
+  }
+}

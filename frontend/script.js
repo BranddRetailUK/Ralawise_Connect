@@ -34,17 +34,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.querySelector('.sync-trigger')?.addEventListener('click', async (e) => {
-  const btn = e.target.closest('.sync-trigger');
-  const textSpan = document.getElementById('sync-btn-text');
+  document.querySelector('.sync-trigger')?.addEventListener('click', async () => {
   const shop = new URLSearchParams(window.location.search).get('shop');
-  if (!shop) return;
+  if (!shop) return alert('Missing shop in URL');
 
-  // 🔄 Syncing style
-  btn.disabled = true;
-  btn.classList.add('bg-gray-600', 'cursor-wait');
-  btn.classList.remove('bg-black');
-  textSpan.textContent = 'Syncing...';
+  const button = document.querySelector('.sync-trigger');
+  const span = button.querySelector('span');
+  const progress = button.querySelector('.progress-bar');
+
+  // Reset animation by cloning the progress bar
+  const newProgress = progress.cloneNode(true);
+  progress.parentNode.replaceChild(newProgress, progress);
+
+  button.classList.add('syncing');
+  span.textContent = 'Syncing...';
 
   try {
     const res = await fetch('/api/generate-sku-map', {
@@ -54,34 +57,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const data = await res.json();
+
     if (res.ok) {
       await fetch(`/api/sync?shop=${shop}`);
-
-      // ✅ Success animation
-      btn.classList.remove('bg-gray-600');
-      btn.classList.add('bg-green-600');
-      textSpan.textContent = '✓ Synced';
-
-      // Optional pulse/fade animation
-      btn.classList.add('animate-pulse');
-
-      // ⏱ Reset after delay
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.classList.remove('bg-green-600', 'cursor-wait', 'animate-pulse');
-        btn.classList.add('bg-black');
-        textSpan.textContent = 'Start Sync';
-      }, 3000);
+      button.classList.remove('syncing');
+      span.textContent = 'Synced ✅';
     } else {
-      textSpan.textContent = 'Failed';
-      btn.classList.add('bg-red-600');
+      console.error(data);
+      button.classList.remove('syncing');
+      span.textContent = 'Start Sync';
+      alert('❌ Failed to generate SKU map: ' + data.error);
     }
   } catch (err) {
     console.error('❌ Sync error:', err);
-    btn.classList.add('bg-red-600');
-    textSpan.textContent = 'Failed';
+    button.classList.remove('syncing');
+    span.textContent = 'Start Sync';
+    alert('❌ Failed to start sync');
   }
 });
+
 
 
 
