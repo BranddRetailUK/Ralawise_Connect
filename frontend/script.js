@@ -36,14 +36,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelector('.sync-trigger')?.addEventListener('click', async (e) => {
   const btn = e.target.closest('.sync-trigger');
-  const badge = document.getElementById('sync-badge');
+  const textSpan = document.getElementById('sync-btn-text');
   const shop = new URLSearchParams(window.location.search).get('shop');
-  if (!shop) return alert('Missing shop in URL');
+  if (!shop) return;
 
-  // 🔄 Show syncing state
+  // 🔄 Syncing style
   btn.disabled = true;
-  btn.classList.add('opacity-50', 'cursor-wait');
-  badge.classList.remove('hidden');
+  btn.classList.add('bg-gray-600', 'cursor-wait');
+  btn.classList.remove('bg-black');
+  textSpan.textContent = 'Syncing...';
 
   try {
     const res = await fetch('/api/generate-sku-map', {
@@ -53,24 +54,35 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const data = await res.json();
-
     if (res.ok) {
-      alert(`✅ ${data.inserted} SKUs mapped. Starting sync...`);
       await fetch(`/api/sync?shop=${shop}`);
-      alert(`✅ Sync complete.`);
+
+      // ✅ Success animation
+      btn.classList.remove('bg-gray-600');
+      btn.classList.add('bg-green-600');
+      textSpan.textContent = '✓ Synced';
+
+      // Optional pulse/fade animation
+      btn.classList.add('animate-pulse');
+
+      // ⏱ Reset after delay
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.classList.remove('bg-green-600', 'cursor-wait', 'animate-pulse');
+        btn.classList.add('bg-black');
+        textSpan.textContent = 'Start Sync';
+      }, 3000);
     } else {
-      console.error(data);
-      alert('❌ Failed to generate SKU map: ' + data.error);
+      textSpan.textContent = 'Failed';
+      btn.classList.add('bg-red-600');
     }
   } catch (err) {
     console.error('❌ Sync error:', err);
-    alert('❌ Failed to start sync');
-  } finally {
-    btn.disabled = false;
-    btn.classList.remove('opacity-50', 'cursor-wait');
-    badge.classList.add('hidden');
+    btn.classList.add('bg-red-600');
+    textSpan.textContent = 'Failed';
   }
 });
+
 
 
 

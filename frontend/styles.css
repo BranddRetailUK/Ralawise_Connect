@@ -1,0 +1,12 @@
+@keyframes grow {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.animate-grow {
+  animation: grow 2s ease-in-out forwards;
+}
