@@ -15,25 +15,48 @@ router.get('/', async (req, res) => {
 
   try {
     const [custom, smart] = await Promise.all([
-      axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count,image`, {
+      axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,image`, {
         headers: { 'X-Shopify-Access-Token': token },
       }),
-      axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count,image`, {
+      axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,image`, {
         headers: { 'X-Shopify-Access-Token': token },
       }),
     ]);
 
     const collections = [...custom.data.custom_collections, ...smart.data.smart_collections];
 
-    res.json({
-      collections: collections.map((c) => ({
-        id: c.id,
-        title: c.title,
-        handle: c.handle,
-        product_count: c.products_count || 0,
-        image: c.image?.src || null,
-      })),
-    });
+    const collectionsWithCounts = [];
+
+    for (const c of collections) {
+      try {
+        const countRes = await axios.get(`https://${shop}/admin/api/2024-04/collections/${c.id}/products/count.json`, {
+          headers: { 'X-Shopify-Access-Token': token },
+        });
+
+        collectionsWithCounts.push({
+          id: c.id,
+          title: c.title,
+          handle: c.handle,
+          image: c.image?.src || null,
+          product_count: countRes.data.count,
+        });
+
+        // Add delay to avoid rate limiting
+        await new Promise((r) => setTimeout(r, 300)); // 300ms between calls
+      } catch (countErr) {
+        console.warn(`⚠️ Failed to fetch product count for collection ${c.id}:`, countErr.response?.data || countErr.message);
+        collectionsWithCounts.push({
+          id: c.id,
+          title: c.title,
+          handle: c.handle,
+          image: c.image?.src || null,
+          product_count: 0,
+        });
+      }
+    }
+
+    res.json({ collections: collectionsWithCounts });
+
   } catch (err) {
     console.error('❌ Error fetching collections:', err.response?.data || err.message);
     res.status(500).json({ error: 'Failed to fetch collections' });
