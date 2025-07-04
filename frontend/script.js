@@ -182,9 +182,15 @@ document.addEventListener('DOMContentLoaded', () => {
       div.className = 'bg-white shadow rounded p-4';
 
       div.innerHTML = `
-        <div class="text-sm font-semibold text-gray-900">${col.title}</div>
-        <div class="text-xs text-gray-500">${col.product_count} product(s)</div>
-      `;
+  <div class="flex items-center gap-4">
+    <img src="${col.image || 'https://placehold.co/80x80?text=No+Image'}" class="w-16 h-16 object-cover rounded border" alt="Collection image" />
+    <div>
+      <div class="text-sm font-semibold text-gray-900">${col.title}</div>
+      <div class="text-xs text-gray-500">${col.product_count} product(s)</div>
+    </div>
+  </div>
+`;
+
 
       container.appendChild(div);
     });

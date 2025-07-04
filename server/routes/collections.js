@@ -15,10 +15,10 @@ router.get('/', async (req, res) => {
 
   try {
     const [custom, smart] = await Promise.all([
-      axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count`, {
+      axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count,image`, {
         headers: { 'X-Shopify-Access-Token': token },
       }),
-      axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count`, {
+      axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count,image`, {
         headers: { 'X-Shopify-Access-Token': token },
       }),
     ]);
@@ -31,6 +31,7 @@ router.get('/', async (req, res) => {
         title: c.title,
         handle: c.handle,
         product_count: c.products_count || 0,
+        image: c.image?.src || null,
       })),
     });
   } catch (err) {
