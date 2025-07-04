@@ -15,25 +15,24 @@ router.get('/', async (req, res) => {
 
   try {
     const [custom, smart] = await Promise.all([
-  axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count`, {
-    headers: { 'X-Shopify-Access-Token': token },
-  }),
-  axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count`, {
-    headers: { 'X-Shopify-Access-Token': token },
-  }),
-]);
-
+      axios.get(`https://${shop}/admin/api/2024-04/custom_collections.json?fields=id,title,handle,products_count`, {
+        headers: { 'X-Shopify-Access-Token': token },
+      }),
+      axios.get(`https://${shop}/admin/api/2024-04/smart_collections.json?fields=id,title,handle,products_count`, {
+        headers: { 'X-Shopify-Access-Token': token },
+      }),
+    ]);
 
     const collections = [...custom.data.custom_collections, ...smart.data.smart_collections];
 
-    res.json(
-      collections.map((c) => ({
+    res.json({
+      collections: collections.map((c) => ({
         id: c.id,
         title: c.title,
         handle: c.handle,
         product_count: c.products_count || 0,
-      }))
-    );
+      })),
+    });
   } catch (err) {
     console.error('❌ Error fetching collections:', err.response?.data || err.message);
     res.status(500).json({ error: 'Failed to fetch collections' });
