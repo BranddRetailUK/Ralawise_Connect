@@ -1,12 +1,12 @@
-@keyframes grow {
-  from {
+@keyframes growBar {
+  0% {
     width: 0%;
   }
-  to {
+  100% {
     width: 100%;
   }
 }
 
 .animate-grow {
-  animation: grow 2s ease-in-out forwards;
+  animation: growBar 3s linear forwards;
 }
