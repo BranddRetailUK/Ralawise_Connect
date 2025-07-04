@@ -66,6 +66,16 @@ export async function getSyncErrorCount(shop) {
   return parseInt(result.rows[0].count);
 }
 
+export async function getMappedSkuCount(shop) {
+  const result = await db.query(
+    `SELECT COUNT(*) FROM store_skus WHERE shop_domain = $1`,
+    [shop]
+  );
+  return parseInt(result.rows[0].count);
+}
+
+
+
 // ✅ Logging helper for sync results
 export async function logSyncResult(shop, sku, status, message = null) {
   await db.query(
