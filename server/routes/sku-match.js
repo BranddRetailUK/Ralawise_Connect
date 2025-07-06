@@ -70,17 +70,36 @@ function normalizeColour(input) {
 
 // === Match SKU from DB ===
 async function findMatchingSKU(styleCode, colour, size) {
-  const query = `
-    SELECT * FROM ralawise_skus
-    WHERE LOWER(REPLACE(REPLACE(colour_name, ' ', ''), '-', '')) = $1
-      AND LOWER(REPLACE(REPLACE(size_code, ' ', ''), '-', '')) = $2
-      AND style_code = $3
-    LIMIT 1
-  `;
-  const values = [clean(colour), clean(size), styleCode];
-  const result = await db.query(query, values);
-  return result.rows[0] || null;
+  // Step 1: get all matching colour codes for the cleaned colour
+  const colourRes = await db.query(
+    `SELECT sku_code FROM colour_map WHERE input_name = $1`,
+    [colour]
+  );
+
+  if (colourRes.rows.length === 0) return null;
+
+  // Step 2: try matching each colour code with size and style
+  for (const row of colourRes.rows) {
+    const colourCode = row.sku_code;
+    const matchRes = await db.query(
+      `
+      SELECT * FROM ralawise_skus
+      WHERE sku_code ILIKE $1
+        AND style_code = $2
+        AND size_code = $3
+      LIMIT 1
+      `,
+      [`%-${colourCode}-%`, styleCode, size.toUpperCase()]
+    );
+
+    if (matchRes.rows.length > 0) {
+      return matchRes.rows[0];
+    }
+  }
+
+  return null;
 }
+
 
 // === Upload + Match Route ===
 router.post('/match-skus', upload.single('file'), async (req, res) => {
