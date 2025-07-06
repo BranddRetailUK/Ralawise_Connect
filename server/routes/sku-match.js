@@ -70,7 +70,18 @@ function normalizeColour(input) {
 
 // === Match SKU from DB ===
 async function findMatchingSKU(styleCode, colour, size) {
-  // Step 1: get all matching colour codes for the cleaned colour
+  const sizeMap = {
+    'xs': 'XS', 's': 'S', 'small': 'S',
+    'm': 'M', 'medium': 'M',
+    'l': 'L', 'large': 'L',
+    'xl': 'XL',
+    '2xl': '2XL', 'xxl': '2XL',
+    '3xl': '3XL', 'xxxl': '3XL',
+    '4xl': '4XL', '5xl': '5XL', '6xl': '6XL',
+  };
+
+  const normalizedSize = sizeMap[size.toLowerCase()] || size.toUpperCase();
+
   const colourRes = await db.query(
     `SELECT sku_code FROM colour_map WHERE input_name = $1`,
     [colour]
@@ -78,7 +89,6 @@ async function findMatchingSKU(styleCode, colour, size) {
 
   if (colourRes.rows.length === 0) return null;
 
-  // Step 2: try matching each colour code with size and style
   for (const row of colourRes.rows) {
     const colourCode = row.sku_code;
     const matchRes = await db.query(
@@ -89,7 +99,7 @@ async function findMatchingSKU(styleCode, colour, size) {
         AND size_code = $3
       LIMIT 1
       `,
-      [`%-${colourCode}-%`, styleCode, size.toUpperCase()]
+      [`%-${colourCode}-%`, styleCode, normalizedSize]
     );
 
     if (matchRes.rows.length > 0) {
@@ -99,6 +109,7 @@ async function findMatchingSKU(styleCode, colour, size) {
 
   return null;
 }
+
 
 
 // === Upload + Match Route ===
