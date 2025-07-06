@@ -8,21 +8,22 @@ import { fileURLToPath } from 'url';
 import db from '../db.js';
 
 const router = express.Router();
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const upload = multer({ dest: path.join(__dirname, '../../uploads') });
 
-// Normalize colour & size
-function normalize(value) {
-  return value ? value.trim().toLowerCase().replace(/\s+/g, '') : '';
+// === NORMALIZATION HELPERS ===
+function clean(str) {
+  return (str || '')
+    .toString()
+    .trim()
+    .replace(/\s+/g, '')           // remove all whitespace
+    .replace(/[^a-zA-Z0-9]/g, '')  // strip special chars
+    .toLowerCase();
 }
 
-// Match logic
-async function findMatchingSKU(styleGuess, colour, size) {
-  const colourNorm = normalize(colour);
-  const sizeNorm = normalize(size);
-
+// === DB MATCH LOGIC ===
+async function findMatchingSKU(styleCode, colour, size) {
   const query = `
     SELECT * FROM ralawise_skus
     WHERE LOWER(REPLACE(colour_name, ' ', '')) = $1
@@ -30,15 +31,15 @@ async function findMatchingSKU(styleGuess, colour, size) {
       AND style_code = $3
     LIMIT 1
   `;
-  const values = [colourNorm, sizeNorm, styleGuess];
+  const values = [clean(colour), clean(size), styleCode];
   const result = await db.query(query, values);
   return result.rows[0] || null;
 }
 
-// POST /api/match-skus
+// === ROUTE: POST /api/match-skus ===
 router.post('/match-skus', upload.single('file'), async (req, res) => {
-  const results = [];
   const filePath = path.resolve(req.file.path);
+  const results = [];
 
   try {
     const stream = fs.createReadStream(filePath).pipe(csv());
@@ -46,11 +47,11 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
     for await (const row of stream) {
       const handle = row['Handle'];
       const title = row['Title'] || '';
+      const originalSKU = row['Variant SKU'];
       const colour = row['Option1 Value'];
       const size = row['Option2 Value'];
-      const originalSKU = row['Variant SKU'];
 
-      const styleGuessMatch = originalSKU?.match(/AM\d{3}|TS\d{3}|BB\d{3}/i);
+      const styleGuessMatch = (originalSKU || title).match(/(AM|BB|TS)\d{3}/i);
       const styleCode = styleGuessMatch ? styleGuessMatch[0].toUpperCase() : null;
 
       let result = {
@@ -58,10 +59,14 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
         original_sku: originalSKU,
         suggested_sku: null,
         confidence: 'low',
-        reason: 'Style code not found'
+        reason: ''
       };
 
-      if (styleCode) {
+      if (!styleCode) {
+        result.reason = 'Style code not found';
+      } else if (!colour || !size) {
+        result.reason = 'Missing colour or size';
+      } else {
         const match = await findMatchingSKU(styleCode, colour, size);
         if (match) {
           result.suggested_sku = match.sku_code;
@@ -75,10 +80,10 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       results.push(result);
     }
 
-    fs.unlinkSync(filePath);
+    fs.unlinkSync(filePath); // clean up uploaded file
     res.json(results);
   } catch (err) {
-    console.error('Error matching SKUs:', err);
+    console.error('❌ Error matching SKUs:', err);
     res.status(500).json({ error: 'Failed to process file.' });
   }
 });
