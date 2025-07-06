@@ -141,15 +141,15 @@
     <h4 class="text-md font-semibold mb-2">🧠 Match Store Products to Ralawise SKUs</h4>
     <form id="sku-match-form" class="flex flex-col sm:flex-row gap-4 items-start">
       <input type="file" name="file" id="match-file" accept=".csv" class="border rounded px-2 py-1 text-sm" required />
-      <button type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Match SKUs</button>
+      <button id="matchBtn" type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Match SKUs</button>
+      <button id="updateBtn" type="button" class="bg-gray-400 text-white px-4 py-2 rounded opacity-50 cursor-not-allowed" disabled>Update SKUs</button>
     </form>
     <div id="sku-match-results" class="mt-4 text-sm space-y-2"></div>
   </div>
 </section>
 
-
-
 </main>
+
 
 <script src="script.js?v=1.0.2"></script>
 

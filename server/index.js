@@ -16,6 +16,8 @@ import uploadRoutes from './routes/upload.js';
 import collectionsRoute from './routes/collections.js';
 import dashboardStatsRoute from './routes/dashboard-stats.js';
 import skuMatchRoute from './routes/sku-match.js';
+import updateSkuRoute from './routes/update-skus.js';
+
 
 dotenv.config();
 const app = express();
@@ -51,6 +53,8 @@ app.use('/api', uploadRoutes);
 app.use('/api/collections', collectionsRoute); 
 app.use('/api/dashboard-stats', dashboardStatsRoute);
 app.use('/api', skuMatchRoute); 
+app.use('/api', updateSkuRoute);
+
 
 // 404 fallback
 app.use((req, res) => res.status(404).json({ error: 'Not Found' }));

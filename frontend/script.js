@@ -1,5 +1,7 @@
 // frontend/script.js
 document.addEventListener('DOMContentLoaded', () => {
+  let matchedSKUs = [];
+
   const tabButtons = document.querySelectorAll('.tab-btn');
   const tabPages = document.querySelectorAll('.tab-page');
 
@@ -43,15 +45,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const span = button.querySelector('span');
     let progressBar = button.querySelector('.progress-bar');
 
-    // Remove any old bar
     if (progressBar) progressBar.remove();
 
-    // Create and insert bar
     progressBar = document.createElement('div');
     progressBar.classList.add('progress-bar');
     button.prepend(progressBar);
 
-    // Reset classes
     button.classList.remove('bg-black', 'text-white', 'bg-green-600');
     button.classList.add('syncing');
     span.textContent = 'Syncing...';
@@ -69,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetch(`/api/sync?shop=${shop}`);
         span.textContent = 'Synced ✅';
 
-        // Reset after 3 seconds
         setTimeout(() => {
           button.classList.remove('syncing', 'bg-green-600');
           button.classList.add('bg-black', 'text-white');
@@ -186,52 +184,75 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // === SKU Match Upload Logic ===
-const matchForm = document.getElementById('sku-match-form');
-if (matchForm) {
-  matchForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const fileInput = document.getElementById('match-file');
-    const resultsContainer = document.getElementById('sku-match-results');
+  const matchForm = document.getElementById('sku-match-form');
+  if (matchForm) {
+    matchForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fileInput = document.getElementById('match-file');
+      const resultsContainer = document.getElementById('sku-match-results');
 
-    if (!fileInput.files.length) return;
+      if (!fileInput.files.length) return;
 
-    const formData = new FormData();
-    formData.append('file', fileInput.files[0]);
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
 
-    resultsContainer.innerHTML = '⏳ Matching...';
+      resultsContainer.innerHTML = '⏳ Matching...';
 
-    try {
-      const res = await fetch('/api/match-skus', {
-        method: 'POST',
-        body: formData
-      });
-      const data = await res.json();
+      try {
+        const res = await fetch('/api/match-skus', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
 
-      if (!Array.isArray(data)) throw new Error('Unexpected response');
+        if (!Array.isArray(data)) throw new Error('Unexpected response');
 
-      resultsContainer.innerHTML = '';
-      data.forEach(row => {
-        const div = document.createElement('div');
-        div.className = 'border rounded p-2 bg-gray-50';
+        matchedSKUs = data;
 
-        div.innerHTML = `
-          <div><strong>${row.handle || '[No Handle]'}</strong></div>
-          <div>Original SKU: ${row.original_sku || '–'}</div>
-          <div>Suggested: <span class="font-semibold">${row.suggested_sku || '❌ No Match'}</span></div>
-          <div>Confidence: <span class="${row.confidence === 'high' ? 'text-green-600' : 'text-yellow-600'}">${row.confidence}</span></div>
-          <div class="text-xs text-gray-500">${row.reason}</div>
-        `;
+        resultsContainer.innerHTML = '';
+        data.forEach(row => {
+          const div = document.createElement('div');
+          div.className = 'border rounded p-2 bg-gray-50';
 
-        resultsContainer.appendChild(div);
-      });
+          div.innerHTML = `
+            <div><strong>${row.handle || '[No Handle]'}</strong></div>
+            <div>Original SKU: ${row.original_sku || '–'}</div>
+            <div>Suggested: <span class="font-semibold">${row.suggested_sku || '❌ No Match'}</span></div>
+            <div>Confidence: <span class="${row.confidence === 'high' ? 'text-green-600' : 'text-yellow-600'}">${row.confidence}</span></div>
+            <div class="text-xs text-gray-500">${row.reason}</div>
+          `;
 
-    } catch (err) {
-      console.error('❌ Match failed:', err);
-      resultsContainer.innerHTML = '<p class="text-red-600">Failed to match SKUs.</p>';
+          resultsContainer.appendChild(div);
+        });
+
+        const updateBtn = document.getElementById('updateBtn');
+        updateBtn.disabled = false;
+        updateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        updateBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+      } catch (err) {
+        console.error('❌ Match failed:', err);
+        resultsContainer.innerHTML = '<p class="text-red-600">Failed to match SKUs.</p>';
+      }
+    });
+  }
+
+  document.getElementById('updateBtn')?.addEventListener('click', async () => {
+    const shop = new URLSearchParams(window.location.search).get('shop');
+    if (!matchedSKUs.length || !shop) return alert("No matched SKUs or shop ID.");
+
+    const res = await fetch('/api/update-skus', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ matches: matchedSKUs, shop }),
+    });
+
+    const data = await res.json();
+    if (data.success) {
+      alert(`✅ ${data.updated} SKUs updated!`);
+    } else {
+      alert('❌ Failed to update SKUs. Check logs.');
     }
   });
-}
-
 
   async function loadCollections() {
     const urlParams = new URLSearchParams(window.location.search);
