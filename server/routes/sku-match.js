@@ -17,10 +17,55 @@ function clean(str) {
   return (str || '')
     .toString()
     .trim()
-    .replace(/-/g, ' ')              // convert dash to space
-    .replace(/\s+/g, '')             // remove all spaces
-    .replace(/[^a-zA-Z0-9]/g, '')    // strip non-alphanum
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, '')
+    .replace(/[^a-zA-Z0-9]/g, '')
     .toLowerCase();
+}
+
+function normalizeSize(input) {
+  const raw = (input || '').toLowerCase().trim();
+
+  const sizeMap = {
+    'xxs': '2xsmall', '2xs': '2xsmall',
+    'xs': 'xsmall', 's': 'small',
+    'm': 'medium', 'med': 'medium',
+    'l': 'large', 'lrg': 'large',
+    'xl': 'xlarge', 'x-large': 'xlarge', 'x large': 'xlarge',
+    '2xl': '2xlarge', 'xxl': '2xlarge',
+    '3xl': '3xlarge', 'xxxl': '3xlarge',
+    '4xl': '4xlarge', '5xl': '5xlarge', '6xl': '6xlarge'
+  };
+
+  return sizeMap[raw] || raw;
+}
+
+function normalizeColour(input) {
+  if (!input) return '';
+
+  // Map known abbreviations
+  const colourMap = {
+    'blk': 'black',
+    'wht': 'white',
+    'gry': 'grey',
+    'grn': 'green',
+    'navy': 'navyblue'
+  };
+
+  let normalized = input.toLowerCase().trim();
+
+  // Convert slashes and sort multiple colours for consistency
+  if (normalized.includes('/')) {
+    normalized = normalized
+      .split('/')
+      .map(c => colourMap[c.trim()] || c.trim())
+      .sort()
+      .join('/');
+  } else {
+    normalized = colourMap[normalized] || normalized;
+  }
+
+  return normalized;
 }
 
 // === Match SKU from DB ===
@@ -49,16 +94,16 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       const handle = row['Handle'];
       const title = row['Title'] || '';
       const originalSKU = row['Variant SKU'];
-      const colour = row['Option1 Value'];
-      const size = row['Option2 Value'];
+      const colourRaw = row['Option1 Value'];
+      const sizeRaw = row['Option2 Value'];
 
-      const styleGuessMatch = (originalSKU || title).match(/(AM|BB|TS)\d{3}/i);
+      const styleGuessMatch = (originalSKU || title).match(/(AM|BB|TS|JH|GD|SS)\d{3}/i);
       const styleCode = styleGuessMatch ? styleGuessMatch[0].toUpperCase() : null;
 
       const cleaned = {
         style: clean(styleCode),
-        colour: clean(colour),
-        size: clean(size)
+        colour: clean(normalizeColour(colourRaw)),
+        size: clean(normalizeSize(sizeRaw))
       };
 
       let result = {
@@ -69,18 +114,17 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
         reason: ''
       };
 
-      // Log what we’re trying to match
       console.log(`🔍 Row:`, {
-        raw: { styleCode, colour, size },
+        raw: { styleCode, colour: colourRaw, size: sizeRaw },
         cleaned
       });
 
       if (!styleCode) {
         result.reason = 'Style code not found';
-      } else if (!colour || !size) {
+      } else if (!colourRaw || !sizeRaw) {
         result.reason = 'Missing colour or size';
       } else {
-        const match = await findMatchingSKU(styleCode, colour, size);
+        const match = await findMatchingSKU(styleCode, cleaned.colour, cleaned.size);
 
         if (match) {
           result.suggested_sku = match.sku_code;
