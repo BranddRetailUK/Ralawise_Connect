@@ -146,7 +146,7 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       const cleaned = {
         style: clean(styleCode),
         colour: clean(normalizeColour(colourRaw)),
-        size: clean(normalizeSize(sizeRaw))
+        size: normalizedSize
       };
 
       let result = {
