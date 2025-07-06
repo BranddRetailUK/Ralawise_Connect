@@ -69,7 +69,7 @@ function normalizeColour(input) {
 }
 
 // === Match SKU from DB ===
-async function findMatchingSKU(styleCode, colour, size) {
+async function findMatchingSKU(styleCode, colour, sizeRaw) {
   const sizeMap = {
     'xs': 'XS', 's': 'S', 'small': 'S',
     'm': 'M', 'medium': 'M',
@@ -80,35 +80,37 @@ async function findMatchingSKU(styleCode, colour, size) {
     '4xl': '4XL', '5xl': '5XL', '6xl': '6XL',
   };
 
-  const normalizedSize = sizeMap[size.toLowerCase()] || size.toUpperCase();
+  const normalizedSize = sizeMap[sizeRaw?.toLowerCase()] || sizeRaw?.toUpperCase() || '';
+  if (!styleCode || !colour || !normalizedSize) return null;
 
+  // Get all possible colour codes for input name
   const colourRes = await db.query(
     `SELECT sku_code FROM colour_map WHERE input_name = $1`,
-    [colour]
+    [colour.toLowerCase()]
   );
 
-  if (colourRes.rows.length === 0) return null;
-
-  for (const row of colourRes.rows) {
-    const colourCode = row.sku_code;
-    const matchRes = await db.query(
-      `
-      SELECT * FROM ralawise_skus
-      WHERE sku_code ILIKE $1
-        AND style_code = $2
-        AND size_code = $3
-      LIMIT 1
-      `,
-      [`%-${colourCode}-%`, styleCode, normalizedSize]
-    );
-
-    if (matchRes.rows.length > 0) {
-      return matchRes.rows[0];
-    }
+  const colourCodes = colourRes.rows.map(row => row.sku_code);
+  if (colourCodes.length === 0) {
+    console.log(`❌ No colour codes found for '${colour}'`);
+    return null;
   }
 
-  return null;
+  // Search against ralawise_skus with all colour codes at once
+  const placeholders = colourCodes.map((_, i) => `$${i + 1}`).join(', ');
+  const matchQuery = `
+    SELECT * FROM ralawise_skus
+    WHERE style_code = $${colourCodes.length + 1}
+      AND size_code = $${colourCodes.length + 2}
+      AND split_part(sku_code, '-', 2) IN (${placeholders})
+    LIMIT 1
+  `;
+
+  const params = [...colourCodes, styleCode.toUpperCase(), normalizedSize];
+  const matchRes = await db.query(matchQuery, params);
+
+  return matchRes.rows[0] || null;
 }
+
 
 
 
