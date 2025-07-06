@@ -12,19 +12,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const upload = multer({ dest: path.join(__dirname, '../../uploads') });
 
-// === NORMALIZATION HELPERS ===
+// === Normalize Input ===
 function clean(str) {
   return (str || '')
     .toString()
     .trim()
-    .replace(/-/g, ' ')              // replace dashes with spaces
-    .replace(/\s+/g, '')             // then remove all whitespace
-    .replace(/[^a-zA-Z0-9]/g, '')    // remove special characters
+    .replace(/-/g, ' ')              // convert dash to space
+    .replace(/\s+/g, '')             // remove all spaces
+    .replace(/[^a-zA-Z0-9]/g, '')    // strip non-alphanum
     .toLowerCase();
 }
 
-
-// === DB MATCH LOGIC ===
+// === Match SKU from DB ===
 async function findMatchingSKU(styleCode, colour, size) {
   const query = `
     SELECT * FROM ralawise_skus
@@ -38,7 +37,7 @@ async function findMatchingSKU(styleCode, colour, size) {
   return result.rows[0] || null;
 }
 
-// === ROUTE: POST /api/match-skus ===
+// === Upload + Match Route ===
 router.post('/match-skus', upload.single('file'), async (req, res) => {
   const filePath = path.resolve(req.file.path);
   const results = [];
@@ -56,6 +55,12 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       const styleGuessMatch = (originalSKU || title).match(/(AM|BB|TS)\d{3}/i);
       const styleCode = styleGuessMatch ? styleGuessMatch[0].toUpperCase() : null;
 
+      const cleaned = {
+        style: clean(styleCode),
+        colour: clean(colour),
+        size: clean(size)
+      };
+
       let result = {
         handle,
         original_sku: originalSKU,
@@ -64,29 +69,37 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
         reason: ''
       };
 
+      // Log what we’re trying to match
+      console.log(`🔍 Row:`, {
+        raw: { styleCode, colour, size },
+        cleaned
+      });
+
       if (!styleCode) {
         result.reason = 'Style code not found';
       } else if (!colour || !size) {
         result.reason = 'Missing colour or size';
       } else {
         const match = await findMatchingSKU(styleCode, colour, size);
+
         if (match) {
           result.suggested_sku = match.sku_code;
           result.confidence = 'high';
           result.reason = 'Exact match';
         } else {
-          result.reason = 'No match for style/colour/size';
+          result.reason = '❌ No match in DB for normalized values';
+          console.log('❌ No match found in DB for:', cleaned);
         }
       }
 
       results.push(result);
     }
 
-    fs.unlinkSync(filePath); // clean up uploaded file
+    fs.unlinkSync(filePath);
     res.json(results);
   } catch (err) {
-    console.error('❌ Error matching SKUs:', err);
-    res.status(500).json({ error: 'Failed to process file.' });
+    console.error('❌ Error processing CSV:', err);
+    res.status(500).json({ error: 'Failed to process file' });
   }
 });
 
