@@ -84,3 +84,26 @@ export async function logSyncResult(shop, sku, status, message = null) {
     [shop, sku, status, message]
   );
 }
+
+
+export async function getRecentLiveLogs(limit = 50) {
+  const result = await db.query(
+    `SELECT sku, quantity, synced_at, shop_domain
+     FROM sync_status
+     ORDER BY synced_at DESC
+     LIMIT $1`,
+    [limit]
+  );
+  return result.rows;
+}
+
+export async function getRecentSyncLogs(limit = 50) {
+  const result = await db.query(
+    `SELECT sku, status, message, synced_at, shop_domain
+     FROM sync_logs
+     ORDER BY synced_at DESC
+     LIMIT $1`,
+    [limit]
+  );
+  return result.rows;
+}
