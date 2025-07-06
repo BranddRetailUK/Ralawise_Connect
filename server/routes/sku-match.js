@@ -17,10 +17,12 @@ function clean(str) {
   return (str || '')
     .toString()
     .trim()
-    .replace(/\s+/g, '')           // remove all whitespace
-    .replace(/[^a-zA-Z0-9]/g, '')  // strip special chars
+    .replace(/-/g, ' ')              // replace dashes with spaces
+    .replace(/\s+/g, '')             // then remove all whitespace
+    .replace(/[^a-zA-Z0-9]/g, '')    // remove special characters
     .toLowerCase();
 }
+
 
 // === DB MATCH LOGIC ===
 async function findMatchingSKU(styleCode, colour, size) {
