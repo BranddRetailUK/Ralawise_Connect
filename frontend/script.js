@@ -185,6 +185,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === SKU Match Upload Logic ===
+const matchForm = document.getElementById('sku-match-form');
+if (matchForm) {
+  matchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fileInput = document.getElementById('match-file');
+    const resultsContainer = document.getElementById('sku-match-results');
+
+    if (!fileInput.files.length) return;
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    resultsContainer.innerHTML = '⏳ Matching...';
+
+    try {
+      const res = await fetch('/api/match-skus', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+
+      if (!Array.isArray(data)) throw new Error('Unexpected response');
+
+      resultsContainer.innerHTML = '';
+      data.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'border rounded p-2 bg-gray-50';
+
+        div.innerHTML = `
+          <div><strong>${row.handle || '[No Handle]'}</strong></div>
+          <div>Original SKU: ${row.original_sku || '–'}</div>
+          <div>Suggested: <span class="font-semibold">${row.suggested_sku || '❌ No Match'}</span></div>
+          <div>Confidence: <span class="${row.confidence === 'high' ? 'text-green-600' : 'text-yellow-600'}">${row.confidence}</span></div>
+          <div class="text-xs text-gray-500">${row.reason}</div>
+        `;
+
+        resultsContainer.appendChild(div);
+      });
+
+    } catch (err) {
+      console.error('❌ Match failed:', err);
+      resultsContainer.innerHTML = '<p class="text-red-600">Failed to match SKUs.</p>';
+    }
+  });
+}
+
+
   async function loadCollections() {
     const urlParams = new URLSearchParams(window.location.search);
     const shop = urlParams.get('shop');

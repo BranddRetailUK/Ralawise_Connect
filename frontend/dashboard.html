@@ -126,15 +126,27 @@
 </section>
 
 
-
+  <!-- Tab Map -->
 <section id="tab-map" class="tab-page hidden">
   <h2 class="text-xl font-semibold mb-2">SKU Map</h2>
   <p class="text-gray-500 mb-4">Download or view your current Shopify → Ralawise SKU mappings.</p>
+
   <div class="bg-white shadow rounded p-4 flex items-center justify-between">
     <p class="text-sm text-gray-700">🧪 SKU map placeholder — ready for table/export hook.</p>
     <button class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Download</button>
   </div>
+
+  <!-- ✅ Add uploader here -->
+  <div class="mt-6 bg-white shadow rounded p-4">
+    <h4 class="text-md font-semibold mb-2">🧠 Match Store Products to Ralawise SKUs</h4>
+    <form id="sku-match-form" class="flex flex-col sm:flex-row gap-4 items-start">
+      <input type="file" name="file" id="match-file" accept=".csv" class="border rounded px-2 py-1 text-sm" required />
+      <button type="submit" class="bg-black text-white px-4 py-2 rounded hover:bg-gray-800">Match SKUs</button>
+    </form>
+    <div id="sku-match-results" class="mt-4 text-sm space-y-2"></div>
+  </div>
 </section>
+
 
 
 </main>
