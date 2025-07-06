@@ -25,6 +25,7 @@ function clean(str) {
 
 function normalizeSize(input) {
   const raw = (input || '').toLowerCase().trim();
+
   const sizeMap = {
     'xxs': '2xsmall', '2xs': '2xsmall',
     'xs': 'xsmall', 's': 'small',
@@ -35,11 +36,14 @@ function normalizeSize(input) {
     '3xl': '3xlarge', 'xxxl': '3xlarge',
     '4xl': '4xlarge', '5xl': '5xlarge', '6xl': '6xlarge'
   };
+
   return sizeMap[raw] || raw;
 }
 
 function normalizeColour(input) {
   if (!input) return '';
+
+  // Map known abbreviations
   const colourMap = {
     'blk': 'black',
     'wht': 'white',
@@ -47,7 +51,10 @@ function normalizeColour(input) {
     'grn': 'green',
     'navy': 'navyblue'
   };
+
   let normalized = input.toLowerCase().trim();
+
+  // Convert slashes and sort multiple colours for consistency
   if (normalized.includes('/')) {
     normalized = normalized
       .split('/')
@@ -57,11 +64,12 @@ function normalizeColour(input) {
   } else {
     normalized = colourMap[normalized] || normalized;
   }
+
   return normalized;
 }
 
 // === Match SKU from DB ===
-async function findMatchingSKU(styleCode, colour, sizeRaw) {
+async function findMatchingSKU(styleCode, colour, size) {
   const sizeMap = {
     'xs': 'XS', 's': 'S', 'small': 'S',
     'm': 'M', 'medium': 'M',
@@ -72,32 +80,37 @@ async function findMatchingSKU(styleCode, colour, sizeRaw) {
     '4xl': '4XL', '5xl': '5XL', '6xl': '6XL',
   };
 
-  const normalizedSize = sizeMap[sizeRaw?.toLowerCase()] || sizeRaw?.toUpperCase() || '';
-  if (!styleCode || !colour || !normalizedSize) return null;
+  const normalizedSize = sizeMap[size.toLowerCase()] || size.toUpperCase();
 
   const colourRes = await db.query(
     `SELECT sku_code FROM colour_map WHERE input_name = $1`,
-    [colour.toLowerCase()]
+    [colour]
   );
-  const colourCodes = colourRes.rows.map(row => row.sku_code);
-  if (colourCodes.length === 0) {
-    console.log(`❌ No colour codes found for '${colour}'`);
-    return null;
+
+  if (colourRes.rows.length === 0) return null;
+
+  for (const row of colourRes.rows) {
+    const colourCode = row.sku_code;
+    const matchRes = await db.query(
+      `
+      SELECT * FROM ralawise_skus
+      WHERE sku_code ILIKE $1
+        AND style_code = $2
+        AND size_code = $3
+      LIMIT 1
+      `,
+      [`%-${colourCode}-%`, styleCode, normalizedSize]
+    );
+
+    if (matchRes.rows.length > 0) {
+      return matchRes.rows[0];
+    }
   }
 
-  const placeholders = colourCodes.map((_, i) => `$${i + 1}`).join(', ');
-  const matchQuery = `
-    SELECT * FROM ralawise_skus
-    WHERE style_code = $${colourCodes.length + 1}
-      AND size_code = $${colourCodes.length + 2}
-      AND split_part(sku_code, '-', 2) IN (${placeholders})
-    LIMIT 1
-  `;
-  const params = [...colourCodes, styleCode.toUpperCase(), normalizedSize];
-  const matchRes = await db.query(matchQuery, params);
-
-  return matchRes.rows[0] || null;
+  return null;
 }
+
+
 
 // === Upload + Match Route ===
 router.post('/match-skus', upload.single('file'), async (req, res) => {
@@ -111,34 +124,41 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       const handle = row['Handle'];
       const title = row['Title'] || '';
       const originalSKU = row['Variant SKU'];
-
       let sizeRaw = null;
-      let colourRaw = null;
+let colourRaw = null;
 
-      // Detect size/colour from options
-      const knownSizes = ['xs','s','m','l','xl','xxl','2xl','3xl','4xl','5xl','6xl','medium','large','small','xlarge','2xlarge','3xlarge','4xlarge','5xlarge'];
-      for (let i = 1; i <= 3; i++) {
-        const name = (row[`Option${i} Name`] || '').toLowerCase().trim();
-        const value = row[`Option${i} Value`];
-        if (!value) continue;
+// Look through option name/value pairs and assign accordingly
+for (let i = 1; i <= 3; i++) {
+  const name = (row[`Option${i} Name`] || '').toLowerCase().trim();
+  const value = row[`Option${i} Value`];
 
-        if (name.includes('size') && !sizeRaw) {
-          sizeRaw = value;
-        } else if ((name.includes('colour') || name.includes('color')) && !colourRaw) {
-          colourRaw = value;
-        }
-      }
+  if (!value) continue;
 
-      // Heuristic fallback if unknown option order
-      if (!sizeRaw || !colourRaw) {
-        const v1 = (row['Option1 Value'] || '').toLowerCase().trim();
-        const v2 = (row['Option2 Value'] || '').toLowerCase().trim();
+  if (name.includes('size') && !sizeRaw) {
+    sizeRaw = value;
+  } else if ((name.includes('colour') || name.includes('color')) && !colourRaw) {
+    colourRaw = value;
+  }
+}
 
-        if (knownSizes.includes(v1) && !sizeRaw) sizeRaw = v1;
-        if (knownSizes.includes(v2) && !sizeRaw) sizeRaw = v2;
-        if (!colourRaw && sizeRaw === v1) colourRaw = v2;
-        else if (!colourRaw && sizeRaw === v2) colourRaw = v1;
-      }
+// Fallback: if only 2 values present and we still can’t tell which is which,
+// try using heuristics (e.g. size values are short or in known size list)
+if (!sizeRaw || !colourRaw) {
+  const val1 = row['Option1 Value'] || '';
+  const val2 = row['Option2 Value'] || '';
+
+  const knownSizes = ['xs', 's', 'm', 'l', 'xl', 'xxl', '2xl', '3xl', '4xl', '5xl', '6xl', 'medium', 'large', 'small', 'xlarge', '2xlarge', '3xlarge', '4xlarge', '5xlarge'];
+
+  const v1 = val1.toLowerCase().trim();
+  const v2 = val2.toLowerCase().trim();
+
+  if (knownSizes.includes(v1) && !sizeRaw) sizeRaw = val1;
+  if (knownSizes.includes(v2) && !sizeRaw) sizeRaw = val2;
+
+  if (!colourRaw && sizeRaw === val1) colourRaw = val2;
+  else if (!colourRaw && sizeRaw === val2) colourRaw = val1;
+}
+
 
       const styleGuessMatch = (originalSKU || title).match(/(AM|BB|TS|JH|GD|SS)\d{3}/i);
       const styleCode = styleGuessMatch ? styleGuessMatch[0].toUpperCase() : null;
@@ -146,7 +166,7 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
       const cleaned = {
         style: clean(styleCode),
         colour: clean(normalizeColour(colourRaw)),
-        size: normalizedSize
+        size: clean(normalizeSize(sizeRaw))
       };
 
       let result = {
@@ -168,6 +188,7 @@ router.post('/match-skus', upload.single('file'), async (req, res) => {
         result.reason = 'Missing colour or size';
       } else {
         const match = await findMatchingSKU(styleCode, cleaned.colour, cleaned.size);
+
         if (match) {
           result.suggested_sku = match.sku_code;
           result.confidence = 'high';
