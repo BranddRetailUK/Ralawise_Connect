@@ -17,15 +17,13 @@ const logPath = path.join(__dirname, '../sync-log.json');
 
 global.liveLogBuffer = [];
 
-function appendLog(entry) {
+async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
   const log = { time: timestamp, ...entry };
 
   global.liveLogBuffer.push(
     `[${new Date(timestamp).toLocaleTimeString()}] ${
-      log.status === 'success'
-        ? '✅'
-        : '❌'
+      log.status === 'success' ? '✅' : '❌'
     } ${log.sku} ${
       log.status === 'success'
         ? `synced → Qty ${log.quantity}`
@@ -39,6 +37,16 @@ function appendLog(entry) {
 
   existing.unshift(log);
   fsSync.writeFileSync(logPath, JSON.stringify(existing.slice(0, 50), null, 2));
+}
+
+async function logToSyncStatusTable(shop, sku, quantity) {
+  await db.query(
+    `INSERT INTO sync_status (shop_domain, sku, quantity, synced_at)
+     VALUES ($1, $2, $3, NOW())
+     ON CONFLICT (shop_domain, sku)
+     DO UPDATE SET quantity = EXCLUDED.quantity, synced_at = NOW()`,
+    [shop, sku, quantity]
+  );
 }
 
 export async function runSyncForShop(shop, token) {
@@ -69,23 +77,29 @@ export async function runSyncForShop(shop, token) {
         const { quantity } = await getRalawiseStock(ralawise_sku);
 
         if (quantity === null) {
-          appendLog({ sku: ralawise_sku, status: 'error', error: 'No stock returned' });
+          await logToDiskAndMemory({
+            sku: ralawise_sku,
+            status: 'error',
+            error: 'No stock returned'
+          });
           continue;
         }
 
         const inventoryItemId = await getInventoryItemId(shop, shopify_variant_id);
         await updateInventoryLevel(shop, inventoryItemId, locationId, quantity);
 
-        appendLog({
+        await logToDiskAndMemory({
           sku: ralawise_sku,
           status: 'success',
           quantity,
           variantId: shopify_variant_id,
         });
 
-        await new Promise((res) => setTimeout(res, 1500));
+        await logToSyncStatusTable(shop, ralawise_sku, quantity);
+
+        await new Promise((res) => setTimeout(res, 1500)); // rate limiting
       } catch (err) {
-        appendLog({
+        await logToDiskAndMemory({
           sku: ralawise_sku,
           status: 'error',
           error: err.message || err,
