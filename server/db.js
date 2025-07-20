@@ -42,7 +42,6 @@ export async function getAccessToken(shop) {
     );
 
     if (result.rows.length > 0) {
-      console.log(`🔑 Retrieved token from DB for ${shop}`);
       return result.rows[0].access_token;
     }
 
@@ -53,6 +52,7 @@ export async function getAccessToken(shop) {
     return null;
   }
 }
+
 
 // ✅ Alias for compatibility with collections.js and dashboard-stats.js
 export { getAccessToken as getShopToken };
