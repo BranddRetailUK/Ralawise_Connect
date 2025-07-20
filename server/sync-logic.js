@@ -49,13 +49,16 @@ async function logToSyncStatusTable(shop, sku, quantity) {
   );
 }
 
-export async function runSyncForShop(shop, token) {
-  console.log(`🔁 Starting stock sync for: ${shop}`);
+export async function runSyncForShop(shop, token, options = {}) {
+  const { reverse = false } = options;
+  console.log(`🔁 Starting stock sync for: ${shop} ${reverse ? '(reversed)' : ''}`);
   global.liveLogBuffer = [];
 
   try {
+    const orderDirection = reverse ? 'DESC' : 'ASC';
+
     const { rows: skuMap } = await db.query(
-      'SELECT ralawise_sku, variant_id FROM store_skus WHERE shop_domain = $1',
+      `SELECT ralawise_sku, variant_id FROM store_skus WHERE shop_domain = $1 ORDER BY created_at ${orderDirection}`,
       [shop]
     );
 
