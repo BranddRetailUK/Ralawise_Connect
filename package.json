@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "refresh-sku-map": "node src/refresh-sku-map.js",
+    "refresh-sku-map": "node scripts/refresh-sku-map.js",
     "sync-batch-0": "BATCH_INDEX=0 TOTAL_BATCHES=3 node src/index.js",
     "sync-batch-1": "BATCH_INDEX=1 TOTAL_BATCHES=3 node src/index.js",
     "sync-batch-2": "BATCH_INDEX=2 TOTAL_BATCHES=3 node src/index.js"

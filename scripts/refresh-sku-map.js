@@ -47,7 +47,7 @@ async function fetchAllProducts() {
       if (batch.length > 0) {
         products.push(...batch);
         since_id = batch[batch.length - 1].id;
-        await sleep(600); // wait 600ms between calls to stay under 2 req/sec
+        await sleep(600); // stay under rate limit
       } else {
         hasMore = false;
       }
@@ -102,12 +102,12 @@ async function updateStoreSkus(records) {
   console.log(`🎯 Sync complete → ${inserted} inserted, ${updated} updated, ${skipped} skipped`);
 }
 
-async function refreshSkuMap() {
+// Expose the refreshSkuMap function so it can be imported in cron jobs
+export async function refreshSkuMap() {
   console.log(`🔍 Fetching all Shopify products and variants...`);
   const products = await fetchAllProducts();
 
   const matched = [];
-
   for (const product of products) {
     for (const variant of product.variants) {
       if (variant.sku && isRalawiseSku(variant.sku)) {
@@ -127,4 +127,10 @@ async function refreshSkuMap() {
   await updateStoreSkus(matched);
 }
 
-refreshSkuMap();
+// If executed directly (`node scripts/refresh-sku-map.js`), run the refresh routine.
+if (import.meta.url === `file://${process.argv[1]}`) {
+  refreshSkuMap().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}

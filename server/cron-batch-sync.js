@@ -1,11 +1,15 @@
 // server/cron-batch-sync.js
 import { runSyncForShop } from './sync-logic.js';
 import db, { logSyncResult } from './db.js';
+import { refreshSkuMap } from '../scripts/refresh-sku-map.js';
 
 (async () => {
   console.log('🌀 Starting batch sync for all installed stores...');
 
   try {
+    // Refresh the SKU map so new/updated SKUs are included
+    await refreshSkuMap();
+
     const { rows: stores } = await db.query('SELECT shop_domain, access_token FROM store_tokens');
 
     for (const store of stores) {

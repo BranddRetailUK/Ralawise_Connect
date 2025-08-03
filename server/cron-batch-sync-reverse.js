@@ -1,13 +1,19 @@
 // server/cron-batch-sync-reverse.js
 import { runSyncForShop } from './sync-logic.js';
 import db, { logSyncResult } from './db.js';
+import { refreshSkuMap } from '../scripts/refresh-sku-map.js';
 
 (async () => {
   console.log('🔄 Starting REVERSE batch sync for all installed stores (newest SKUs first)...');
 
   try {
-    // Get stores ordered by latest token creation (assumes latest shops = newest SKUs)
-    const { rows: stores } = await db.query('SELECT shop_domain, access_token FROM store_tokens ORDER BY created_at DESC');
+    // Refresh mapping before starting a reverse sync
+    await refreshSkuMap();
+
+    // Get stores ordered by latest token creation
+    const { rows: stores } = await db.query(
+      'SELECT shop_domain, access_token FROM store_tokens ORDER BY created_at DESC'
+    );
 
     for (const store of stores) {
       const { shop_domain, access_token } = store;
