@@ -16,6 +16,7 @@ const __dirname = path.dirname(__filename);
 const logPath = path.join(__dirname, '../sync-log.json');
 
 global.liveLogBuffer = [];
+const variantTitleCache = new Map();
 
 async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
@@ -49,6 +50,45 @@ async function logToSyncStatusTable(shop, sku, quantity) {
   );
 }
 
+async function getVariantLabel(shop, variantId) {
+  if (variantTitleCache.has(variantId)) return variantTitleCache.get(variantId);
+
+  let label = null;
+  try {
+    // Try store_products (newer table)
+    const sp = await db.query(
+      `SELECT product_title, variant_title, product_handle
+       FROM store_products
+       WHERE shop_domain = $1 AND variant_id = $2
+       LIMIT 1`,
+      [shop, variantId]
+    );
+
+    if (sp.rows.length) {
+      const { product_title, variant_title, product_handle } = sp.rows[0];
+      label = `${product_title || 'Unknown product'} — ${variant_title || 'Variant'}`.trim();
+      if (product_handle) {
+        label = `${label} (/${product_handle})`;
+      }
+    } else {
+      // Fallback to legacy products table if present
+      const legacy = await db.query(
+        `SELECT title, handle FROM products WHERE shop_domain = $1 AND variant_id = $2 LIMIT 1`,
+        [shop, variantId]
+      );
+      if (legacy.rows.length) {
+        const { title, handle } = legacy.rows[0];
+        label = `${title || 'Unknown product'}${handle ? ` (/${handle})` : ''}`;
+      }
+    }
+  } catch (err) {
+    console.warn(`⚠️ Failed to load variant label for ${variantId}:`, err.message || err);
+  }
+
+  variantTitleCache.set(variantId, label);
+  return label;
+}
+
 export async function runSyncForShop(shop, token, options = {}) {
   const { reverse = false } = options;
   console.log(`🔁 Starting stock sync for: ${shop} ${reverse ? '(reversed)' : ''}`);
@@ -80,6 +120,7 @@ export async function runSyncForShop(shop, token, options = {}) {
         const { quantity } = await getRalawiseStock(ralawise_sku);
 
         if (quantity === null) {
+          console.warn(`⚠️ ${shop} ${ralawise_sku}: no stock returned`);
           await logToDiskAndMemory({
             sku: ralawise_sku,
             status: 'error',
@@ -90,6 +131,11 @@ export async function runSyncForShop(shop, token, options = {}) {
 
         const inventoryItemId = await getInventoryItemId(shop, shopify_variant_id);
         await updateInventoryLevel(shop, inventoryItemId, locationId, quantity);
+        const label = await getVariantLabel(shop, shopify_variant_id);
+        console.log(
+          `✅ ${shop} ${ralawise_sku}: set qty ${quantity} (variant ${shopify_variant_id}, item ${inventoryItemId})` +
+            (label ? ` — ${label}` : '')
+        );
 
         await logToDiskAndMemory({
           sku: ralawise_sku,
@@ -102,6 +148,7 @@ export async function runSyncForShop(shop, token, options = {}) {
 
         await new Promise((res) => setTimeout(res, 1500)); // rate limiting
       } catch (err) {
+        console.error(`❌ ${shop} ${ralawise_sku}: sync failed`, err.message || err);
         await logToDiskAndMemory({
           sku: ralawise_sku,
           status: 'error',
