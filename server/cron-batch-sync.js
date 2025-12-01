@@ -4,6 +4,7 @@ import db, { logSyncResult } from './db.js';
 import { refreshSkuMap } from '../scripts/refresh-sku-map.js';
 
 (async () => {
+  console.log('🌀 Script: cron-batch-sync.js (oldest-first)');
   console.log('🌀 Starting batch sync for all installed stores...');
 
   try {
@@ -14,7 +15,13 @@ import { refreshSkuMap } from '../scripts/refresh-sku-map.js';
 
     for (const store of stores) {
       const { shop_domain, access_token } = store;
-      console.log(`🔁 Syncing store: ${shop_domain}`);
+      const { rows: skuCountRows } = await db.query(
+        'SELECT COUNT(*) FROM store_skus WHERE shop_domain = $1',
+        [shop_domain]
+      );
+      const skuCount = parseInt(skuCountRows[0]?.count || '0', 10);
+
+      console.log(`🔁 Syncing store: ${shop_domain} (oldest-first) — ${skuCount} SKU mappings`);
 
       try {
         await runSyncForShop(shop_domain, access_token);

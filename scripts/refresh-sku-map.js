@@ -2,129 +2,179 @@
 import fs from 'fs/promises';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import pg from 'pg';
+import db from '../server/db.js';
 
 dotenv.config();
-const { Pool } = pg;
 
-const shopify = axios.create({
-  baseURL: `${process.env.SHOPIFY_STORE_URL}/admin/api/2023-10`,
-  headers: {
-    'X-Shopify-Access-Token': process.env.SHOPIFY_ACCESS_TOKEN,
-    'Content-Type': 'application/json'
-  }
-});
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-function isRalawiseSku(sku) {
-  return /^[A-Z0-9]{5,}$/i.test(sku); // e.g. "JH001DPBKXS", "YP237BKLO"
-}
+const API_VERSION = '2024-10';
+const PAGE_SIZE = 250;
 
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchAllProducts() {
-  let products = [];
-  let since_id = 0;
-  let hasMore = true;
-
-  try {
-    do {
-      const res = await shopify.get(`/products.json`, {
-        params: {
-          limit: 250,
-          since_id,
-          fields: 'id,title,variants'
-        }
-      });
-
-      const batch = res.data.products;
-      if (batch.length > 0) {
-        products.push(...batch);
-        since_id = batch[batch.length - 1].id;
-        await sleep(600); // stay under rate limit
-      } else {
-        hasMore = false;
-      }
-    } while (hasMore);
-
-    return products;
-  } catch (err) {
-    console.error('❌ Failed to fetch products from Shopify');
-    console.error(err.response?.data || err.message);
-    process.exit(1);
-  }
+function isRalawiseSku(sku) {
+  return /^[A-Z0-9]{6,}$/i.test(sku || ''); // e.g. "JH001DPBKXS"
 }
 
-async function updateStoreSkus(records) {
-  let inserted = 0;
-  let updated = 0;
-  let skipped = 0;
+function parseNextPageInfo(linkHeader = '') {
+  const match = linkHeader.match(/<[^>]*[?&]page_info=([^>]+)>;\s*rel="next"/);
+  return match ? match[1] : null;
+}
 
-  for (const rec of records) {
+function normalizeShopDomain(urlOrDomain = '') {
+  return urlOrDomain.replace(/^https?:\/\//, '').replace(/\/$/, '');
+}
+
+async function fetchAllProducts(shop, token) {
+  const products = [];
+  let pageInfo = null;
+  let page = 1;
+
+  while (true) {
     try {
-      const { rows } = await pool.query(
-        `SELECT sku FROM store_skus WHERE variant_id = $1 LIMIT 1`,
-        [rec.variant_id]
+      const params = pageInfo
+        ? { limit: PAGE_SIZE, page_info: pageInfo, fields: 'id,title,variants' }
+        : { limit: PAGE_SIZE, order: 'id asc', fields: 'id,title,variants' };
+
+      const res = await axios.get(
+        `https://${shop}/admin/api/${API_VERSION}/products.json`,
+        {
+          params,
+          headers: {
+            'X-Shopify-Access-Token': token,
+            'Content-Type': 'application/json',
+          },
+        }
       );
 
-      const existingSku = rows[0]?.sku;
+      const batch = res.data.products || [];
+      products.push(...batch);
+      console.log(`🛒 ${shop}: fetched page ${page} (${batch.length} products)`);
 
-      if (!existingSku) {
-        await pool.query(
-          `INSERT INTO store_skus (shop_domain, sku, product_id, variant_id, ralawise_sku)
-           VALUES ($1, $2, $3, $4, $5)`,
-          ['ggappareluk.myshopify.com', rec.sku, rec.product_id, rec.variant_id, rec.sku]
-        );
-        inserted++;
-        console.log(`✅ Inserted: ${rec.variant_id} → ${rec.sku}`);
-      } else if (existingSku !== rec.sku) {
-        await pool.query(
-          `UPDATE store_skus SET sku = $1, ralawise_sku = $1 WHERE variant_id = $2`,
-          [rec.sku, rec.variant_id]
-        );
-        updated++;
-        console.log(`🔁 Updated: ${rec.variant_id} → ${existingSku} ➝ ${rec.sku}`);
-      } else {
-        skipped++;
-        console.log(`⏭️ Skipped: ${rec.variant_id} — SKU unchanged`);
-      }
+      const next = parseNextPageInfo(res.headers?.link);
+      if (!next) break;
+
+      pageInfo = next;
+      page += 1;
+      await sleep(500); // small throttle to avoid rate limits
     } catch (err) {
-      console.error(`❌ DB error for variant ${rec.variant_id}:`, err.message);
+      if (err.response?.status === 429) {
+        const waitMs = parseInt(err.response.headers['retry-after'] || '2', 10) * 1000;
+        console.warn(`🚦 ${shop}: rate limited, waiting ${waitMs}ms...`);
+        await sleep(waitMs);
+        continue;
+      }
+
+      console.error(`❌ ${shop}: failed to fetch products`, err.response?.data || err.message);
+      throw err;
     }
   }
 
-  console.log(`🎯 Sync complete → ${inserted} inserted, ${updated} updated, ${skipped} skipped`);
+  return products;
+}
+
+async function upsertStoreSkus(shop, matched) {
+  let processed = 0;
+
+  for (const rec of matched) {
+    try {
+      await db.query(
+        `
+        INSERT INTO store_skus (shop_domain, sku, ralawise_sku, product_id, variant_id)
+        VALUES ($1, $2, $2, $3, $4)
+        ON CONFLICT (shop_domain, variant_id)
+        DO UPDATE SET
+          sku = EXCLUDED.sku,
+          ralawise_sku = EXCLUDED.ralawise_sku,
+          product_id = EXCLUDED.product_id
+        `,
+        [shop, rec.ralawise_sku, rec.product_id, rec.shopify_variant_id]
+      );
+      processed += 1;
+    } catch (err) {
+      console.error(`❌ ${shop}: DB upsert failed for variant ${rec.shopify_variant_id}`, err.message || err);
+    }
+  }
+
+  console.log(`🎯 ${shop}: upserted ${processed} SKU rows into store_skus`);
+}
+
+async function refreshSkuMapForStore(shop, token) {
+  console.log(`🔍 Refreshing SKU map for ${shop}...`);
+  const products = await fetchAllProducts(shop, token);
+
+  const matched = [];
+  for (const product of products) {
+    for (const variant of product.variants || []) {
+      const sku = variant.sku?.trim();
+      if (!sku || !isRalawiseSku(sku)) continue;
+
+      matched.push({
+        ralawise_sku: sku,
+        product_id: product.id,
+        shopify_variant_id: variant.id,
+      });
+    }
+  }
+
+  console.log(`✅ ${shop}: found ${matched.length} Ralawise-format variants`);
+  await upsertStoreSkus(shop, matched);
+
+  return matched;
+}
+
+async function getTargetStores() {
+  const { rows } = await db.query(
+    `SELECT shop_domain, access_token FROM store_tokens WHERE ready_for_sync = true`
+  );
+
+  if (rows.length > 0) return rows;
+
+  // Fallback to env for single-store/manual use
+  if (process.env.SHOPIFY_STORE_URL && process.env.SHOPIFY_ACCESS_TOKEN) {
+    return [
+      {
+        shop_domain: normalizeShopDomain(process.env.SHOPIFY_STORE_URL),
+        access_token: process.env.SHOPIFY_ACCESS_TOKEN,
+      },
+    ];
+  }
+
+  return [];
 }
 
 // Expose the refreshSkuMap function so it can be imported in cron jobs
 export async function refreshSkuMap() {
-  console.log(`🔍 Fetching all Shopify products and variants...`);
-  const products = await fetchAllProducts();
+  const stores = await getTargetStores();
 
-  const matched = [];
-  for (const product of products) {
-    for (const variant of product.variants) {
-      if (variant.sku && isRalawiseSku(variant.sku)) {
-        matched.push({
-          sku: variant.sku.trim(),
-          product_id: product.id,
-          variant_id: variant.id
-        });
-      }
-    }
+  if (!stores.length) {
+    console.warn('⚠️ No stores available for SKU refresh.');
+    return;
   }
 
-  console.log(`✅ Found ${matched.length} Ralawise-format variants.`);
-  await fs.writeFile('./sku-map.json', JSON.stringify(matched, null, 2));
-  console.log('💾 Updated sku-map.json');
+  const filePayload = [];
 
-  await updateStoreSkus(matched);
+  for (const { shop_domain, access_token } of stores) {
+    const matched = await refreshSkuMapForStore(shop_domain, access_token);
+
+    // Keep sku-map.json for compatibility with legacy batch scripts (first store only)
+    if (filePayload.length === 0) {
+      filePayload.push(
+        ...matched.map((m) => ({
+          ralawise_sku: m.ralawise_sku,
+          shopify_variant_id: m.shopify_variant_id,
+        }))
+      );
+    }
+
+    await sleep(750); // brief pause between stores to avoid spikes
+  }
+
+  if (filePayload.length > 0) {
+    await fs.writeFile('./sku-map.json', JSON.stringify(filePayload, null, 2));
+    console.log('💾 Updated sku-map.json for legacy batch sync consumers');
+  }
 }
 
 // If executed directly (`node scripts/refresh-sku-map.js`), run the refresh routine.
