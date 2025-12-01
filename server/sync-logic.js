@@ -19,6 +19,7 @@ global.liveLogBuffer = [];
 const variantTitleCache = new Map();
 const previousQuantityCache = new Map();
 const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 1500;
 
 async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
@@ -190,15 +191,53 @@ export async function runSyncForShop(shop, token, options = {}) {
           continue;
         }
 
-        const inventoryItemId = await withRateLimitRetry(
-          () => getInventoryItemId(shop, shopify_variant_id),
-          `getInventoryItemId for ${shopify_variant_id}`
-        );
+        let inventoryItemId;
+        try {
+          inventoryItemId = await withRateLimitRetry(
+            () => getInventoryItemId(shop, shopify_variant_id),
+            `getInventoryItemId for ${shopify_variant_id}`
+          );
+        } catch (err) {
+          if (err.response?.status === 404) {
+            console.warn(`🚫 ${shop} ${ralawise_sku}: variant ${shopify_variant_id} not found on Shopify (removing mapping)`);
+            await db.query(
+              'DELETE FROM store_skus WHERE shop_domain = $1 AND variant_id = $2',
+              [shop, shopify_variant_id]
+            );
+            await logToDiskAndMemory({
+              sku: ralawise_sku,
+              status: 'error',
+              error: 'Variant not found (deleted mapping)',
+              variantId: shopify_variant_id,
+            });
+            continue;
+          }
+          throw err;
+        }
 
-        await withRateLimitRetry(
-          () => updateInventoryLevel(shop, inventoryItemId, locationId, quantity),
-          `updateInventoryLevel for ${shopify_variant_id}`
-        );
+        try {
+          await withRateLimitRetry(
+            () => updateInventoryLevel(shop, inventoryItemId, locationId, quantity),
+            `updateInventoryLevel for ${shopify_variant_id}`
+          );
+        } catch (err) {
+          if (err.response?.status === 404) {
+            console.warn(`🚫 ${shop} ${ralawise_sku}: inventory update 404 for variant ${shopify_variant_id} (removing mapping)`);
+            await db.query(
+              'DELETE FROM store_skus WHERE shop_domain = $1 AND variant_id = $2',
+              [shop, shopify_variant_id]
+            );
+            await logToDiskAndMemory({
+              sku: ralawise_sku,
+              status: 'error',
+              error: 'Inventory update 404 (deleted mapping)',
+              variantId: shopify_variant_id,
+            });
+            continue;
+          }
+          throw err;
+        }
+
         const label = await getVariantLabel(shop, shopify_variant_id);
         console.log(
           `✅ ${shop} ${ralawise_sku}: set qty ${quantity} (variant ${shopify_variant_id}, item ${inventoryItemId})` +
@@ -214,7 +253,7 @@ export async function runSyncForShop(shop, token, options = {}) {
 
         await logToSyncStatusTable(shop, ralawise_sku, quantity);
 
-        await new Promise((res) => setTimeout(res, 1500)); // rate limiting
+        await new Promise((res) => setTimeout(res, BASE_DELAY_MS)); // rate limiting
       } catch (err) {
         console.error(`❌ ${shop} ${ralawise_sku}: sync failed`, err.message || err);
         await logToDiskAndMemory({
