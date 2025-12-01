@@ -18,8 +18,10 @@ const logPath = path.join(__dirname, '../sync-log.json');
 global.liveLogBuffer = [];
 const variantTitleCache = new Map();
 const previousQuantityCache = new Map();
-const MAX_RETRIES = 3;
-const BASE_DELAY_MS = 1500;
+let last429At = 0;
+const MAX_RETRIES = 1; // keep calls lean to avoid piling up 429s
+const BASE_DELAY_MS = 2000; // increase base delay slightly to ease rate limits
+const GLOBAL_429_BACKOFF_MS = 5000;
 
 async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
@@ -79,7 +81,7 @@ function getRetryDelayMs(err) {
     const seconds = parseInt(err.response.headers['retry-after'], 10);
     if (!Number.isNaN(seconds)) return seconds * 1000;
   }
-  return 2000;
+  return BASE_DELAY_MS;
 }
 
 async function withRateLimitRetry(fn, context = 'request') {
@@ -94,11 +96,16 @@ async function withRateLimitRetry(fn, context = 'request') {
         console.warn(`🚦 Rate limited during ${context}. Waiting ${waitMs}ms (attempt ${attempt + 1}/${MAX_RETRIES})`);
         await new Promise((res) => setTimeout(res, waitMs));
         attempt += 1;
+        last429At = Date.now();
         continue;
       }
       throw err;
     }
   }
+}
+
+function isRalawiseSku(sku) {
+  return /^[A-Z0-9]{6,}$/i.test(sku || '');
 }
 
 async function getVariantLabel(shop, variantId) {
@@ -153,15 +160,19 @@ export async function runSyncForShop(shop, token, options = {}) {
       [shop]
     );
 
-    console.log(`📦 Loaded ${skuMap.length} SKU mappings from DB`);
-    global.liveLogBuffer.push(`📦 Loaded ${skuMap.length} SKU mappings`);
+    // Filter to Ralawise-format SKUs only; skip any legacy/non-Ralawise rows to avoid wasted API calls
+    const filteredSkuMap = skuMap.filter((row) => isRalawiseSku(row.ralawise_sku));
+    const skipped = skuMap.length - filteredSkuMap.length;
+
+    console.log(`📦 Loaded ${filteredSkuMap.length} SKU mappings from DB${skipped > 0 ? ` (skipped ${skipped} non-Ralawise rows)` : ''}`);
+    global.liveLogBuffer.push(`📦 Loaded ${filteredSkuMap.length} SKU mappings${skipped > 0 ? ` (skipped ${skipped} non-Ralawise rows)` : ''}`);
 
     const locationId = await getLocationId(shop);
     global.liveLogBuffer.push(`📍 Shopify location ID: ${locationId}`);
 
     const prevQuantities = await loadPreviousQuantities(shop);
 
-    for (const item of skuMap) {
+    for (const item of filteredSkuMap) {
       const { ralawise_sku, variant_id: shopify_variant_id } = item;
 
       if (!ralawise_sku || !shopify_variant_id) {
@@ -169,8 +180,8 @@ export async function runSyncForShop(shop, token, options = {}) {
         continue;
       }
 
-      try {
-        const { quantity } = await getRalawiseStock(ralawise_sku);
+        try {
+          const { quantity } = await getRalawiseStock(ralawise_sku);
 
         if (quantity === null) {
           console.warn(`⚠️ ${shop} ${ralawise_sku}: no stock returned`);
@@ -253,7 +264,13 @@ export async function runSyncForShop(shop, token, options = {}) {
 
         await logToSyncStatusTable(shop, ralawise_sku, quantity);
 
-        await new Promise((res) => setTimeout(res, BASE_DELAY_MS)); // rate limiting
+        // Base pacing
+        await new Promise((res) => setTimeout(res, BASE_DELAY_MS));
+
+        // If we recently hit a 429, inject an extra pause to cool down
+        if (Date.now() - last429At < 60_000) {
+          await new Promise((res) => setTimeout(res, GLOBAL_429_BACKOFF_MS));
+        }
       } catch (err) {
         console.error(`❌ ${shop} ${ralawise_sku}: sync failed`, err.message || err);
         await logToDiskAndMemory({
