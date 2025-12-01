@@ -18,6 +18,7 @@ const logPath = path.join(__dirname, '../sync-log.json');
 global.liveLogBuffer = [];
 const variantTitleCache = new Map();
 const previousQuantityCache = new Map();
+const MAX_RETRIES = 3;
 
 async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
@@ -42,13 +43,21 @@ async function logToDiskAndMemory(entry) {
 }
 
 async function logToSyncStatusTable(shop, sku, quantity) {
-  await db.query(
-    `INSERT INTO sync_status (shop_domain, sku, quantity, synced_at)
-     VALUES ($1, $2, $3, NOW())
-     ON CONFLICT (shop_domain, sku)
-     DO UPDATE SET quantity = EXCLUDED.quantity, synced_at = NOW()`,
+  // Manual upsert so we don't depend on a DB constraint being present
+  const updated = await db.query(
+    `UPDATE sync_status
+       SET quantity = $3, synced_at = NOW()
+     WHERE shop_domain = $1 AND sku = $2`,
     [shop, sku, quantity]
   );
+
+  if (updated.rowCount === 0) {
+    await db.query(
+      `INSERT INTO sync_status (shop_domain, sku, quantity, synced_at)
+       VALUES ($1, $2, $3, NOW())`,
+      [shop, sku, quantity]
+    );
+  }
 }
 
 async function loadPreviousQuantities(shop) {
@@ -62,6 +71,33 @@ async function loadPreviousQuantities(shop) {
   }
   previousQuantityCache.set(shop, map);
   return map;
+}
+
+function getRetryDelayMs(err) {
+  if (err?.response?.headers?.['retry-after']) {
+    const seconds = parseInt(err.response.headers['retry-after'], 10);
+    if (!Number.isNaN(seconds)) return seconds * 1000;
+  }
+  return 2000;
+}
+
+async function withRateLimitRetry(fn, context = 'request') {
+  let attempt = 0;
+  while (attempt < MAX_RETRIES) {
+    try {
+      return await fn();
+    } catch (err) {
+      const status = err.response?.status;
+      if (status === 429 && attempt < MAX_RETRIES - 1) {
+        const waitMs = getRetryDelayMs(err);
+        console.warn(`🚦 Rate limited during ${context}. Waiting ${waitMs}ms (attempt ${attempt + 1}/${MAX_RETRIES})`);
+        await new Promise((res) => setTimeout(res, waitMs));
+        attempt += 1;
+        continue;
+      }
+      throw err;
+    }
+  }
 }
 
 async function getVariantLabel(shop, variantId) {
@@ -154,8 +190,15 @@ export async function runSyncForShop(shop, token, options = {}) {
           continue;
         }
 
-        const inventoryItemId = await getInventoryItemId(shop, shopify_variant_id);
-        await updateInventoryLevel(shop, inventoryItemId, locationId, quantity);
+        const inventoryItemId = await withRateLimitRetry(
+          () => getInventoryItemId(shop, shopify_variant_id),
+          `getInventoryItemId for ${shopify_variant_id}`
+        );
+
+        await withRateLimitRetry(
+          () => updateInventoryLevel(shop, inventoryItemId, locationId, quantity),
+          `updateInventoryLevel for ${shopify_variant_id}`
+        );
         const label = await getVariantLabel(shop, shopify_variant_id);
         console.log(
           `✅ ${shop} ${ralawise_sku}: set qty ${quantity} (variant ${shopify_variant_id}, item ${inventoryItemId})` +
