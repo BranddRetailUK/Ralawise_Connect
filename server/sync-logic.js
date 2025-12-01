@@ -17,6 +17,7 @@ const logPath = path.join(__dirname, '../sync-log.json');
 
 global.liveLogBuffer = [];
 const variantTitleCache = new Map();
+const previousQuantityCache = new Map();
 
 async function logToDiskAndMemory(entry) {
   const timestamp = new Date().toISOString();
@@ -48,6 +49,19 @@ async function logToSyncStatusTable(shop, sku, quantity) {
      DO UPDATE SET quantity = EXCLUDED.quantity, synced_at = NOW()`,
     [shop, sku, quantity]
   );
+}
+
+async function loadPreviousQuantities(shop) {
+  const { rows } = await db.query(
+    `SELECT sku, quantity FROM sync_status WHERE shop_domain = $1`,
+    [shop]
+  );
+  const map = new Map();
+  for (const row of rows) {
+    map.set(row.sku, row.quantity);
+  }
+  previousQuantityCache.set(shop, map);
+  return map;
 }
 
 async function getVariantLabel(shop, variantId) {
@@ -108,6 +122,8 @@ export async function runSyncForShop(shop, token, options = {}) {
     const locationId = await getLocationId(shop);
     global.liveLogBuffer.push(`📍 Shopify location ID: ${locationId}`);
 
+    const prevQuantities = await loadPreviousQuantities(shop);
+
     for (const item of skuMap) {
       const { ralawise_sku, variant_id: shopify_variant_id } = item;
 
@@ -126,6 +142,15 @@ export async function runSyncForShop(shop, token, options = {}) {
             status: 'error',
             error: 'No stock returned'
           });
+          continue;
+        }
+
+        const prevQty = prevQuantities.get(ralawise_sku);
+        if (prevQty !== undefined && prevQty === quantity) {
+          const label = await getVariantLabel(shop, shopify_variant_id);
+          const skipMsg = `⏭️ ${shop} ${ralawise_sku}: no quantity change (${quantity})` + (label ? ` — ${label}` : '');
+          console.log(skipMsg);
+          global.liveLogBuffer.push(skipMsg);
           continue;
         }
 
